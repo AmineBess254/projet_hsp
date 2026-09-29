@@ -75,9 +75,9 @@ CREATE TABLE `evenement` (
 DROP TABLE IF EXISTS `gestionnaire`;
 CREATE TABLE `gestionnaire` (
                                 `id_utilisateur` int NOT NULL,
-                                `id_gestionnaire_createur` int DEFAULT NULL,
+                                `ref_gestionnaire_createur` int DEFAULT NULL,
                                 PRIMARY KEY (`id_utilisateur`),
-                                KEY `fk_gestionnaire_createur` (`id_gestionnaire_createur`)
+                                KEY `fk_gestionnaire_createur` (`ref_gestionnaire_createur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `hopital`;
@@ -185,7 +185,7 @@ ALTER TABLE `evenement`
   ADD CONSTRAINT `fk_evenement_partenaire` FOREIGN KEY (`ref_partenaire`) REFERENCES `partenaire` (`id_utilisateur`) ON DELETE SET NULL;
 
 ALTER TABLE `gestionnaire`
-    ADD CONSTRAINT `fk_gestionnaire_createur` FOREIGN KEY (`id_gestionnaire_createur`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL,
+    ADD CONSTRAINT `fk_gestionnaire_createur` FOREIGN KEY (`ref_gestionnaire_createur`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_gestionnaire_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `inscription`
