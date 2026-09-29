@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/projet-Hsp.iml" filepath="$PROJECT_DIR$/.idea/projet-Hsp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/projet_hsp.iml" filepath="$PROJECT_DIR$/.idea/projet_hsp.iml" />
     </modules>
   </component>
 </project>
