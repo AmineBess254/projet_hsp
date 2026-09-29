@@ -1,5 +1,5 @@
 <?php
-
+namespace repository;
 class CanalRepository
 {
     private $connexionBdd;

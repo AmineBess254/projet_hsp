@@ -1,5 +1,5 @@
 <?php
-
+namespace repository;
 class CandidatureRepository
 {
     private $connexionBdd;
