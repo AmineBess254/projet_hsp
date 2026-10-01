@@ -31,19 +31,19 @@ class Etablissement
      * @return mixed
      */
     public function getNomEtablissement(){
-        return $this->nom;
+        return $this->nom_etablissement;
     }
     /**
      * @return mixed
      */
     public function getAdresseEtablissement(){
-        return $this->adresse;
+        return $this->adresse_etablissement;
     }
     /**
      * @return mixed
      */
     public function getSitewebEtablissement(){
-        return $this->site_web;
+        return $this->siteweb_etablissement;
     }
     /**
      * @param mixed $id_etablissement
@@ -56,19 +56,19 @@ public function setIdEtablissements($id_etablissement){
      * @param mixed $nom_etablissment
      */
 public function setNomEtablissements($nom_etablissement){
-        $this->nom = $nom_etablissement;
+        $this->nom_etablissement = $nom_etablissement;
 }
 /**
  * @param mixed $adresse_etablissement
  */
 
 public function setAdresseEtablissements($adresse_etablissement){
-        $this->adresse = $adresse_etablissement;
+        $this->adresse_etablissement = $adresse_etablissement;
 }
 /**
  ** @param mixed $siteweb_etablissement
  */
 public function setSitewebEtablissements($siteweb_etablissement){
-        $this->site_web = $siteweb_etablissement;
+        $this->siteweb_etablissement = $siteweb_etablissement;
 }
 }
