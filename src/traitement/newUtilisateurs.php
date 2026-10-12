@@ -7,5 +7,6 @@ if (isset($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['mdp'])) {
     $mdpCrypte = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
     $utilisateur = new Utilisateurs(null, $_POST['nom'], $_POST['prenom'], $_POST['email'], $mdpCrypte, 'en_attente', null);
     $utilisateursRepository = new UtilisateursRepository();
-    $utilisateursRepository->ajouterUtilisateurs($utilisateur);
+    $utilisateursRepository->ajouterUtilisateur($utilisateur);
 }
+header('Location: ../../public/inscription.php?ok=1');
