@@ -10,8 +10,7 @@ class Utilisateurs {
     private $refGestionnaire;
 
 
-    public function __construct($idUtilisateurs = null,$nom, $prenom, $email, $mdp,$statutValidation = 'en_attente',$refGestionnaire = null ) {
-        $this->idUtilisateurs = $idUtilisateurs;
+    public function __construct($idUtilisateurs, $nom, $prenom, $email, $mdp, $statutValidation, $refGestionnaire) {        $this->idUtilisateurs = $idUtilisateurs;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
