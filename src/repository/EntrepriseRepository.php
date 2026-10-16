@@ -1,5 +1,4 @@
 <?php
-namespace repository;
 class EntrepriseRepository
 {
     private $connexionBdd;

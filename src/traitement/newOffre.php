@@ -4,7 +4,7 @@ require_once '../modele/Offre.php';
 require_once '../repository/OffreRepository.php';
 session_start();
 
-//si personne n'est connecté, on fait comme si c'était l'utilisateur 1
+//si pe rsonne n'est connecté, on fait comme si c'était l'utilisateur 1
 if (!isset($_SESSION['id_utilisateur'])) {
     $_SESSION['id_utilisateur'] = 1;
 }
