@@ -88,6 +88,18 @@ CREATE TABLE `hopital` (
                            PRIMARY KEY (`id_hopital`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Les 9 hôpitaux du groupe GDH
+INSERT INTO `hopital` (`nom`, `adresse`) VALUES
+                                             ('Hôpital Sud Paris', 'Marreuil-sur-Seine'),
+                                             ('Hôpital Nord Paris', 'Saint-Maximin'),
+                                             ('Hôpital Général de Lyon', 'Limonest'),
+                                             ('Hôpital Général de Marseille', 'Peypin'),
+                                             ('Hôpital Général de Bordeaux', 'Beychac-et-Caillau'),
+                                             ('Hôpital Général de Nantes', 'Mauves-sur-Loire'),
+                                             ('Hôpital Général de Toulouse', 'Muret'),
+                                             ('Hôpital Général de Strasbourg', 'Vendenheim'),
+                                             ('Hôpital Général de Rennes', 'Pont-Péan');
+
 DROP TABLE IF EXISTS `inscription`;
 CREATE TABLE `inscription` (
                                `id_inscription` int NOT NULL AUTO_INCREMENT,
