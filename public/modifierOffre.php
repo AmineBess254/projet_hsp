@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../src/bdd/Bdd.php';
 require_once '../src/modele/Offre.php';
 require_once '../src/repository/OffreRepository.php';
