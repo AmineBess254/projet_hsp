@@ -1,4 +1,5 @@
-<?php require_once '../bdd/Bdd.php';
+<?php
+require_once '../bdd/Bdd.php';
 require_once '../modele/Utilisateurs.php';
 require_once '../repository/UtilisateursRepository.php';
 session_start();
