@@ -8,129 +8,128 @@ class UtilisateursRepository
         $this->connexionBdd = (new Bdd())->getConnexionBdd();
     }
 
-    public function getUtilisateur($idUtilisateurs)
+    // Transforme une ligne de la base en objet Utilisateurs
+    private function creerObjet($result)
     {
-        $sql = "SELECT * FROM utilisateur WHERE id_utilisateur = :id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':id_utilisateur', $idUtilisateurs);
-        $req->execute();
-        $result = $req->fetch();
-        if (!$result) {
-            return null;
-        }
-        $utilisateur = new Utilisateurs($result["id_utilisateur"], $result["nom"], $result["prenom"], $result["email"], $result["mdp"],
-            $result["statut_validation"], $result["ref_gestionnaire"]);
-        return $utilisateur;
+        return new Utilisateurs($result["id_utilisateur"], $result["nom"], $result["prenom"], $result["email"],
+            $result["mdp"], $result["statut_validation"], $result["ref_gestionnaire"], $result["role"]);
     }
 
+    // Cherche un utilisateur par son email (sert à la connexion)
     public function getUtilisateurParEmail($email)
     {
-        $sql = "SELECT * FROM utilisateur WHERE email = :email";
-        $req = $this->connexionBdd->prepare($sql);
+        $req = $this->connexionBdd->prepare("SELECT * FROM utilisateur WHERE email = :email");
         $req->bindValue(':email', $email);
         $req->execute();
         $result = $req->fetch();
         if (!$result) {
             return null;
         }
-        $utilisateur = new Utilisateurs($result["id_utilisateur"], $result["nom"], $result["prenom"], $result["email"], $result["mdp"],
-            $result["statut_validation"], $result["ref_gestionnaire"]);
-        return $utilisateur;
+        return $this->creerObjet($result);
     }
 
-    public function getAllUtilisateur()
+    // Liste des comptes à valider (sert au gestionnaire)
+    public function getUtilisateursEnAttente()
     {
-        $sql = "SELECT * FROM utilisateur ORDER BY nom, prenom";
-        $req = $this->connexionBdd->prepare($sql);
+        $req = $this->connexionBdd->prepare("SELECT * FROM utilisateur WHERE statut_validation = 'en_attente'");
         $req->execute();
-        $results = $req->fetchAll();
-        $tabUtilisateur = array();
-        foreach ($results as $result) {
-            $utilisateur = new Utilisateurs($result["id_utilisateur"], $result["nom"], $result["prenom"], $result["email"], $result["mdp"],
-                $result["statut_validation"], $result["ref_gestionnaire"]);
-            $tabUtilisateur[] = $utilisateur;
+        $liste = array();
+        foreach ($req->fetchAll() as $result) {
+            $liste[] = $this->creerObjet($result);
         }
-        return $tabUtilisateur;
+        return $liste;
     }
 
-    public function getUtilisateurEnAttente()
-    {
-        $sql = "SELECT * FROM utilisateur WHERE statut_validation = 'en_attente' ORDER BY id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->execute();
-        $results = $req->fetchAll();
-        $tabUtilisateur = array();
-        foreach ($results as $result) {
-            $utilisateur = new Utilisateurs($result["id_utilisateur"], $result["nom"], $result["prenom"], $result["email"], $result["mdp"],
-                $result["statut_validation"], $result["ref_gestionnaire"]);
-            $tabUtilisateur[] = $utilisateur;
-        }
-        return $tabUtilisateur;
-    }
-
+    // Vrai si l'email est déjà pris (sert à l'inscription)
     public function emailExiste($email)
     {
-        $sql = "SELECT * FROM utilisateur WHERE email = :email";
-        $req = $this->connexionBdd->prepare($sql);
+        $req = $this->connexionBdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = :email");
         $req->bindValue(':email', $email);
         $req->execute();
-        return (bool) $req->fetchColumn();
+        return $req->fetchColumn() > 0;
     }
 
+    // Ajoute un utilisateur et renvoie son id
     public function ajouterUtilisateur(Utilisateurs $utilisateur)
     {
-        $sql = "INSERT INTO utilisateur 
-            (nom, prenom, email, mdp)
-            VALUES 
-            (:nom, :prenom, :email, :mdp)";
-
-        $req = $this->connexionBdd->prepare($sql);
-
+        $req = $this->connexionBdd->prepare("INSERT INTO utilisateur (nom, prenom, email, mdp, role)
+                                             VALUES (:nom, :prenom, :email, :mdp, :role)");
         $req->bindValue(':nom', $utilisateur->getNom());
         $req->bindValue(':prenom', $utilisateur->getPrenom());
         $req->bindValue(':email', $utilisateur->getEmail());
-        $req->bindValue(':mdp', $utilisateur->getMdp());   // déjà hashé avec password_hash()
-
+        $req->bindValue(':mdp', $utilisateur->getMdp());
+        $req->bindValue(':role', $utilisateur->getRole());
         $req->execute();
         return $this->connexionBdd->lastInsertId();
     }
 
-    public function modifierUtilisateur(Utilisateurs $utilisateur)
+    // Ajoute le profil selon le rôle (sert à l'inscription)
+    public function ajouterEtudiant($idUtilisateur, $cv, $formation)
     {
-        $sql = "UPDATE utilisateur SET nom = :nom, prenom = :prenom, email = :email WHERE id_utilisateur = :id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':id_utilisateur', $utilisateur->getIdUtilisateurs());
-        $req->bindValue(':nom', $utilisateur->getNom());
-        $req->bindValue(':prenom', $utilisateur->getPrenom());
-        $req->bindValue(':email', $utilisateur->getEmail());
+        $req = $this->connexionBdd->prepare("INSERT INTO etudiant (id_utilisateur, cv, formation) VALUES (:id, :cv, :formation)");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->bindValue(':cv', $cv);
+        $req->bindValue(':formation', $formation);
         $req->execute();
     }
 
-    public function modifierMotDePasse($idUtilisateurs, $mdpHash)
+    public function ajouterMedecin($idUtilisateur, $specialite, $refHopital)
     {
-        $sql = "UPDATE utilisateur SET mdp = :mdp WHERE id_utilisateur = :id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':mdp', $mdpHash);
-        $req->bindValue(':id_utilisateur', $idUtilisateurs);
+        $req = $this->connexionBdd->prepare("INSERT INTO medecin (id_utilisateur, specialite, ref_hopital) VALUES (:id, :specialite, :hopital)");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->bindValue(':specialite', $specialite);
+        $req->bindValue(':hopital', $refHopital);
         $req->execute();
     }
 
-    public function supprimerUtilisateur(Utilisateurs $utilisateur)
+    public function ajouterPartenaire($idUtilisateur, $poste)
     {
-        $sql = "DELETE FROM utilisateur WHERE id_utilisateur = :id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':id_utilisateur', $utilisateur->getIdUtilisateurs());
+        $req = $this->connexionBdd->prepare("INSERT INTO partenaire (id_utilisateur, poste) VALUES (:id, :poste)");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->bindValue(':poste', $poste);
         $req->execute();
     }
 
-    public function changerStatutValidation($idUtilisateurs, $statut, $refGestionnaire)
+    public function ajouterGestionnaire($idUtilisateur, $idCreateur)
     {
-        $sql = "UPDATE utilisateur SET statut_validation = :statut, ref_gestionnaire = :ref_gestionnaire WHERE id_utilisateur = :id_utilisateur";
-        $req = $this->connexionBdd->prepare($sql);
+        $req = $this->connexionBdd->prepare("INSERT INTO gestionnaire (id_utilisateur, ref_gestionnaire_createur) VALUES (:id, :createur)");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->bindValue(':createur', $idCreateur);
+        $req->execute();
+    }
+
+    // Rattachements (sert après l'inscription)
+    public function rattacherEntreprise($idUtilisateur, $idEntreprise)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE partenaire SET ref_entreprise = :entreprise WHERE id_utilisateur = :id");
+        $req->bindValue(':entreprise', $idEntreprise);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    public function rattacherEtablissementEtudiant($idUtilisateur, $idEtablissement)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE etudiant SET ref_etablissement = :etablissement WHERE id_utilisateur = :id");
+        $req->bindValue(':etablissement', $idEtablissement);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    public function rattacherEtablissementMedecin($idUtilisateur, $idEtablissement)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE medecin SET ref_etablissement = :etablissement WHERE id_utilisateur = :id");
+        $req->bindValue(':etablissement', $idEtablissement);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    // Valider ou refuser un compte (sert au gestionnaire)
+    public function changerStatutValidation($idUtilisateur, $statut, $idGestionnaire)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE utilisateur SET statut_validation = :statut, ref_gestionnaire = :gestionnaire WHERE id_utilisateur = :id");
         $req->bindValue(':statut', $statut);
-        $req->bindValue(':ref_gestionnaire', $refGestionnaire);
-        $req->bindValue(':id_utilisateur', $idUtilisateurs);
+        $req->bindValue(':gestionnaire', $idGestionnaire);
+        $req->bindValue(':id', $idUtilisateur);
         $req->execute();
     }
-
 }

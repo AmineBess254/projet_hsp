@@ -1,7 +1,5 @@
 <?php
 
-namespace repository;
-
 class HopitalRepository
 {
     private $connexionBdd;

@@ -3,8 +3,8 @@
         <div class="col-md-5">
             <h1 class="mb-4">Connexion</h1>
             <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'identifiants') { ?>
-                <div class="alert alert-danger">Email ou mot de passe incorrect.</div>        <?php }
-            ?>
+                <div class="alert alert-danger">Email ou mot de passe incorrect.</div>
+            <?php } ?>
             <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'attente') { ?>
                 <div class="alert alert-warning">Votre compte n'a pas encore été validé par un gestionnaire.</div>
             <?php } ?>

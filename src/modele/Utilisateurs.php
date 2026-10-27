@@ -8,22 +8,26 @@ class Utilisateurs {
     private $mdp;
     private $statutValidation;
     private $refGestionnaire;
+    private $role;
 
-
-    public function __construct($idUtilisateurs, $nom, $prenom, $email, $mdp, $statutValidation, $refGestionnaire) {        $this->idUtilisateurs = $idUtilisateurs;
+    // $role est le dernier paramètre et vaut null par défaut :
+    // les anciens appels à new Utilisateurs(...) continuent de fonctionner
+    public function __construct($idUtilisateurs, $nom, $prenom, $email, $mdp, $statutValidation, $refGestionnaire, $role = null) {
+        $this->idUtilisateurs = $idUtilisateurs;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->email = $email;
         $this->mdp = $mdp;
         $this->statutValidation = $statutValidation;
         $this->refGestionnaire = $refGestionnaire;
+        $this->role = $role;
     }
+
     public function getIdUtilisateurs() {
         return $this->idUtilisateurs;
     }
     public function getNom() {
         return $this->nom;
-
     }
     public function getPrenom() {
         return $this->prenom;
@@ -40,6 +44,10 @@ class Utilisateurs {
     public function getRefGestionnaire() {
         return $this->refGestionnaire;
     }
+    public function getRole() {
+        return $this->role;
+    }
+
     public function setIdUtilisateurs($idUtilisateurs) {
         $this->idUtilisateurs = $idUtilisateurs;
     }
@@ -61,7 +69,7 @@ class Utilisateurs {
     public function setRefGestionnaire($refGestionnaire) {
         $this->refGestionnaire = $refGestionnaire;
     }
-
-
-
+    public function setRole($role) {
+        $this->role = $role;
+    }
 }
