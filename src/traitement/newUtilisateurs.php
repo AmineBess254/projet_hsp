@@ -1,4 +1,5 @@
 <?php
+require_once '../auth.php';
 require_once '../bdd/Bdd.php';
 require_once '../modele/Utilisateurs.php';
 require_once '../repository/UtilisateursRepository.php';
@@ -50,6 +51,9 @@ if ($role == 'partenaire') {
     $repository->ajouterPartenaire($idUtilisateur, $_POST['poste']);
 }
 
-// 7. Inscription terminée
-header('Location: ../../public/inscription.php?ok=1');
+// 7. On garde son id et son rôle pour l'étape suivante, puis on l'envoie au rattachement
+$_SESSION['id_inscription'] = $idUtilisateur;
+$_SESSION['role_inscription'] = $role;
+
+header('Location: ../../public/rattachement.php');
 exit;
