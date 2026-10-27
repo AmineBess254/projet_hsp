@@ -244,5 +244,22 @@ ALTER TABLE `reponse`
 ALTER TABLE `utilisateur`
     ADD CONSTRAINT `fk_utilisateur_gestionnaire` FOREIGN KEY (`ref_gestionnaire`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL;
 
-SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_CHECKS = 1;-- =====================================================
+-- Module Comptes (Younes)
+-- =====================================================
+ALTER TABLE `utilisateur`
+    ADD `role` enum('etudiant','medecin','partenaire','gestionnaire') NOT NULL DEFAULT 'etudiant' AFTER `mdp`;
+
+ALTER TABLE `etudiant`
+    ADD `ref_etablissement` int DEFAULT NULL,
+  ADD KEY `fk_etudiant_etablissement` (`ref_etablissement`),
+  ADD CONSTRAINT `fk_etudiant_etablissement`
+    FOREIGN KEY (`ref_etablissement`) REFERENCES `etablissement` (`id_etablissement`) ON DELETE SET NULL;
+
+-- Premier gestionnaire : admin@hsp.fr / Admin123!
+INSERT INTO `utilisateur` (nom, prenom, email, mdp, role, statut_validation)
+VALUES ('Admin', 'HSP', 'admin@hsp.fr',
+        '$2y$10$vtoa8sld0upJR7W2/a6Bf.eK.x6OzJOiAskRe.0mXy6p5atauMRXO',
+        'gestionnaire', 'valide');
+INSERT INTO `gestionnaire` (id_utilisateur) VALUES (LAST_INSERT_ID());
 COMMIT;
