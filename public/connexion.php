@@ -1,7 +1,7 @@
 <?php
-require_once '../bdd/Bdd.php';
-require_once '../modele/Utilisateurs.php';
-require_once '../repository/UtilisateursRepository.php';
+require_once __DIR__ .'/../src/bdd/Bdd.php';
+require_once __DIR__ . '/../src/modele/Utilisateurs.php';
+require_once __DIR__ . '/../src/repository/UtilisateursRepository.php';
 session_start();
 if (isset($_POST['email'], $_POST['mdp'])) {
     $utilisateursRepository = new UtilisateursRepository();
@@ -10,16 +10,15 @@ if (isset($_POST['email'], $_POST['mdp'])) {
         header('Location: ../../public/connexion.php?erreur=identifiants');
         exit();    }
     if ($utilisateur->getStatutValidation() != 'valide') {
-        header('Location: ../../public/connexion.php?erreur=attente');
+        header('Location: connexion.php?erreur=attente');
         exit();
     }
     $_SESSION['id_utilisateur'] = $utilisateur->getIdUtilisateurs();
     $_SESSION['nom'] = $utilisateur->getNom();
     $_SESSION['prenom'] = $utilisateur->getPrenom();
-    header('Location: ../../public/index.php');
+    header('Location: index.php');
     exit();
 }
-header('Location: ../../public/connexion.php');
 include 'header.php'; ?>
     <div class="row justify-content-center">
         <div class="col-md-5">
