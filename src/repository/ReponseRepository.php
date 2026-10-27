@@ -1,7 +1,5 @@
 <?php
 
-namespace repository;
-
 class ReponseRepository
 {
     private $connexionBdd;

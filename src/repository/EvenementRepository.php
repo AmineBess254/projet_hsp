@@ -1,6 +1,5 @@
 <?php
 
-namespace repository;
 class EvenementRepository
 {
     public function getAllEvenements(){

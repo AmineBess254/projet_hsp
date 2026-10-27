@@ -1,8 +1,5 @@
 <?php
 
-namespace repository;
-
-
 class OffreRepository
 {
     private $connexionBdd;

@@ -88,6 +88,18 @@ CREATE TABLE `hopital` (
                            PRIMARY KEY (`id_hopital`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Les 9 hôpitaux du groupe GDH
+INSERT INTO `hopital` (`nom`, `adresse`) VALUES
+                                             ('Hôpital Sud Paris', 'Marreuil-sur-Seine'),
+                                             ('Hôpital Nord Paris', 'Saint-Maximin'),
+                                             ('Hôpital Général de Lyon', 'Limonest'),
+                                             ('Hôpital Général de Marseille', 'Peypin'),
+                                             ('Hôpital Général de Bordeaux', 'Beychac-et-Caillau'),
+                                             ('Hôpital Général de Nantes', 'Mauves-sur-Loire'),
+                                             ('Hôpital Général de Toulouse', 'Muret'),
+                                             ('Hôpital Général de Strasbourg', 'Vendenheim'),
+                                             ('Hôpital Général de Rennes', 'Pont-Péan');
+
 DROP TABLE IF EXISTS `inscription`;
 CREATE TABLE `inscription` (
                                `id_inscription` int NOT NULL AUTO_INCREMENT,
@@ -103,13 +115,30 @@ CREATE TABLE `inscription` (
 DROP TABLE IF EXISTS `medecin`;
 CREATE TABLE `medecin` (
                            `id_utilisateur` int NOT NULL,
-                           `specialite` varchar(100) DEFAULT NULL,
+                           `ref_specialite` int NOT NULL,
                            `ref_hopital` int NOT NULL,
                            `ref_etablissement` int DEFAULT NULL,
                            PRIMARY KEY (`id_utilisateur`),
+                           KEY `fk_medecin_specialite` (`ref_specialite`),
                            KEY `fk_medecin_hopital` (`ref_hopital`),
                            KEY `fk_medecin_etablissement` (`ref_etablissement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `specialite`;
+CREATE TABLE `specialite` (
+                              `id_specialite` int NOT NULL AUTO_INCREMENT,
+                              `nom` varchar(100) NOT NULL,
+                              PRIMARY KEY (`id_specialite`),
+                              UNIQUE KEY `nom` (`nom`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Les 20 spécialités du sujet
+INSERT INTO `specialite` (`nom`) VALUES
+                                     ('Cardiologue'), ('Neurologue'), ('Gastroentérologue'), ('Dermatologue'),
+                                     ('Pédiatre'), ('Oncologue'), ('Pneumologue'), ('Rhumatologue'),
+                                     ('Endocrinologue'), ('Ophtalmologue'), ('Gynécologue'), ('Psychiatre'),
+                                     ('Urologue'), ('Néphrologue'), ('Hématologue'), ('Oto-rhino-laryngologue'),
+                                     ('Chirurgien orthopédique'), ('Anesthésiologue'), ('Médecin interne'), ('Médecin généraliste');
 
 DROP TABLE IF EXISTS `offre`;
 CREATE TABLE `offre` (
@@ -195,6 +224,7 @@ ALTER TABLE `inscription`
 ALTER TABLE `medecin`
     ADD CONSTRAINT `fk_medecin_etablissement` FOREIGN KEY (`ref_etablissement`) REFERENCES `etablissement` (`id_etablissement`) ON DELETE SET NULL,
   ADD CONSTRAINT `fk_medecin_hopital` FOREIGN KEY (`ref_hopital`) REFERENCES `hopital` (`id_hopital`) ON DELETE RESTRICT,
+  ADD CONSTRAINT `fk_medecin_specialite` FOREIGN KEY (`ref_specialite`) REFERENCES `specialite` (`id_specialite`) ON DELETE RESTRICT,
   ADD CONSTRAINT `fk_medecin_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `offre`

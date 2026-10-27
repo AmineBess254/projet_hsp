@@ -1,5 +1,4 @@
 <?php
-namespace repository;
 class PostRepository
 {
     private $connexionBdd;

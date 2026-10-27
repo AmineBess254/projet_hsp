@@ -1,6 +1,5 @@
 <?php
 
-namespace repository;
 class EtablissementRepository
 {
     public function getAllEtablissements(){
