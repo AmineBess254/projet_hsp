@@ -32,7 +32,17 @@ include 'header.php';
                     <?php if ($offre->getSalaireOffre() != null) { ?>
                         <p class="fw-bold">Salaire : <?= $offre->getSalaireOffre() ?> €</p>
                     <?php } ?>
-                    <small class="text-muted">Publiée le <?= date('d/m/Y', strtotime($offre->getDateOffre())) ?></small>
+                    <?php if (isset($_SESSION['id_utilisateur']) && $_SESSION['id_utilisateur'] == $offre->getRefUtilisateur()) {
+                        ?>
+                        <div class="mt-3">
+                            <a href="modifierOffre.php?id=<?= $offre->getIdOffre() ?>" class="btn btn-sm btn-outline-primary">Modifier</a>
+                            <a href="../src/traitement/supprimerOffre.php?id=<?= $offre->getIdOffre() ?>" class="btn btn-sm btn-outline-danger"
+                               <!-- poupup -->
+                               onclick="return confirm('Voulez-vous vraiment supprimer cette offre ?');">Supprimer</a>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
