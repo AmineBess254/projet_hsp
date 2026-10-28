@@ -8,6 +8,9 @@
             <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'attente') { ?>
                 <div class="alert alert-warning">Votre compte n'a pas encore été validé par un gestionnaire.</div>
             <?php } ?>
+            <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'bloque') { ?>
+                <div class="alert alert-danger">Votre compte a été désactivé. Contactez un gestionnaire.</div>
+            <?php } ?>
             <form action="../src/traitement/connexion.php" method="post">
                 <div class="mb-3">
                     <label class="form-label">Email</label>

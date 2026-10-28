@@ -14,7 +14,7 @@ CREATE TABLE `canal` (
                          `date_heure` datetime DEFAULT CURRENT_TIMESTAMP,
                          PRIMARY KEY (`id_canal`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
+INSERT INTO `canal` (`nom_canal`) VALUES    ('Général'),    ('Médecins'),    ('Étudiants');
 DROP TABLE IF EXISTS `candidature`;
 CREATE TABLE `candidature` (
                                `id_candidature` int NOT NULL AUTO_INCREMENT,
@@ -53,7 +53,9 @@ CREATE TABLE `etudiant` (
                             `id_utilisateur` int NOT NULL,
                             `cv` varchar(255) DEFAULT NULL,
                             `formation` varchar(150) DEFAULT NULL,
-                            PRIMARY KEY (`id_utilisateur`)
+                            `ref_etablissement` int DEFAULT NULL,
+                            PRIMARY KEY (`id_utilisateur`),
+                            KEY `fk_etudiant_etablissement` (`ref_etablissement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Les organisateurs ne sont plus dans cette table : voir la table `organisateur`
@@ -131,6 +133,11 @@ CREATE TABLE `medecin` (
                            KEY `fk_medecin_hopital` (`ref_hopital`),
                            KEY `fk_medecin_etablissement` (`ref_etablissement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `statut_validation`, `role`) VALUES
+    ('Martin', 'Sophie', 'medecin@hsp.fr', '$2y$10$WU1sSdUGOhvpAXd9ddfXQOihu1qrsOV17c1XJVXM2LBO7BJggXFsG', 'valide', 'medecin');
+INSERT INTO `medecin` (`id_utilisateur`, `ref_specialite`, `ref_hopital`) VALUES
+    (LAST_INSERT_ID(), 1, 1);
 
 DROP TABLE IF EXISTS `specialite`;
 CREATE TABLE `specialite` (
@@ -217,8 +224,8 @@ ALTER TABLE `candidature`
   ADD CONSTRAINT `fk_candidature_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `etudiant`
-    ADD CONSTRAINT `fk_etudiant_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
-
+    ADD CONSTRAINT `fk_etudiant_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_etudiant_etablissement` FOREIGN KEY (`ref_etablissement`) REFERENCES `etablissement` (`id_etablissement`) ON DELETE SET NULL;
 ALTER TABLE `organisateur`
     ADD CONSTRAINT `fk_organisateur_evenement` FOREIGN KEY (`ref_evenement`) REFERENCES `evenement` (`id_evenement`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_organisateur_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
@@ -253,7 +260,8 @@ ALTER TABLE `reponse`
   ADD CONSTRAINT `fk_reponse_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `utilisateur`
-    ADD CONSTRAINT `fk_utilisateur_gestionnaire` FOREIGN KEY (`ref_gestionnaire`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL;
+    ADD `role` enum('etudiant','medecin','partenaire','gestionnaire') NOT NULL DEFAULT 'etudiant' AFTER `mdp`,
+    MODIFY `statut_validation` enum('en_attente','valide','refuse','desactive') NOT NULL DEFAULT 'en_attente';
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;

@@ -1,11 +1,31 @@
-<?php include
-'header.php';
+<?php
+require_once '../src/bdd/Bdd.php';
+require_once '../src/modele/Evenement.php';
+require_once '../src/repository/EvenementRepository.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Pas connecté → page de connexion
+if (!isset($_SESSION['id_utilisateur'])) {
+    header('Location: connexion.php');
+    exit;
+}
+// Connecté mais ni médecin ni partenaire → accueil
+$evenementRepository = new EvenementRepository();
+if (!$evenementRepository->peutCreerEvenement($_SESSION['id_utilisateur'])) {
+    header('Location: index.php');
+    exit;
+}
+
+include 'header.php';
 ?>
     <div class="col-md-8">
         <h1 class="mb-4">Créer un événement</h1>
         <?php if (isset($_GET['ok'])) { ?>
-            <div class="alert alert-success">L'événement a bien été créé !</div>
-        <?php } ?>
+            <div class="alert alert-success">L'événement a bien été créé !</div><?php } ?>
+    <?php if (isset($_GET['erreur'])) { ?>
+        <div class="alert alert-danger">Tous les champs obligatoires doivent être remplis.</div><?php } ?>
         <form action="../src/traitement/newEvenement.php" method="post">
         <div class="mb-3">
             <label class="form-label">Titre</label>

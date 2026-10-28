@@ -40,6 +40,27 @@ class UtilisateursRepository
         return $liste;
     }
 
+    // Tous les comptes déjà traités (validés, refusés, désactivés), sauf celui du gestionnaire connecté
+    public function getComptesTraites($idGestionnaireConnecte)
+    {
+        $req = $this->connexionBdd->prepare("SELECT * FROM utilisateur WHERE statut_validation != 'en_attente' AND id_utilisateur != :id ORDER BY nom, prenom");
+        $req->bindValue(':id', $idGestionnaireConnecte);
+        $req->execute();
+        $liste = array();
+        foreach ($req->fetchAll() as $result) {
+            $liste[] = $this->creerObjet($result);
+        }
+        return $liste;
+    }
+
+    // Supprime un compte (les lignes liées dans etudiant, medecin, partenaire, offre... partent avec, grâce à ON DELETE CASCADE)
+    public function supprimerUtilisateur($idUtilisateur)
+    {
+        $req = $this->connexionBdd->prepare("DELETE FROM utilisateur WHERE id_utilisateur = :id");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
     // Vrai si l'email est déjà pris (sert à l'inscription)
     public function emailExiste($email)
     {
