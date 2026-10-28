@@ -56,6 +56,7 @@ CREATE TABLE `etudiant` (
                             PRIMARY KEY (`id_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Les organisateurs ne sont plus dans cette table : voir la table `organisateur`
 DROP TABLE IF EXISTS `evenement`;
 CREATE TABLE `evenement` (
                              `id_evenement` int NOT NULL AUTO_INCREMENT,
@@ -63,13 +64,19 @@ CREATE TABLE `evenement` (
                              `titre` varchar(150) NOT NULL,
                              `description` text,
                              `adresse` varchar(255) DEFAULT NULL,
+                             `date_evenement` date NOT NULL,
                              `element_requis` varchar(255) DEFAULT NULL,
                              `nb_place` int DEFAULT NULL,
-                             `ref_medecin` int DEFAULT NULL,
-                             `ref_partenaire` int DEFAULT NULL,
-                             PRIMARY KEY (`id_evenement`),
-                             KEY `fk_evenement_medecin` (`ref_medecin`),
-                             KEY `fk_evenement_partenaire` (`ref_partenaire`)
+                             PRIMARY KEY (`id_evenement`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table de liaison : une ligne = « cet utilisateur (médecin ou partenaire) organise cet événement »
+DROP TABLE IF EXISTS `organisateur`;
+CREATE TABLE `organisateur` (
+                                `ref_evenement` int NOT NULL,
+                                `ref_utilisateur` int NOT NULL,
+                                PRIMARY KEY (`ref_evenement`, `ref_utilisateur`),
+                                KEY `fk_organisateur_utilisateur` (`ref_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `gestionnaire`;
@@ -100,6 +107,7 @@ INSERT INTO `hopital` (`nom`, `adresse`) VALUES
                                              ('Hôpital Général de Strasbourg', 'Vendenheim'),
                                              ('Hôpital Général de Rennes', 'Pont-Péan');
 
+-- UNIQUE sur le couple : une personne ne peut pas s'inscrire deux fois au même événement
 DROP TABLE IF EXISTS `inscription`;
 CREATE TABLE `inscription` (
                                `id_inscription` int NOT NULL AUTO_INCREMENT,
@@ -108,7 +116,7 @@ CREATE TABLE `inscription` (
                                `ref_evenement` int NOT NULL,
                                `ref_utilisateur` int NOT NULL,
                                PRIMARY KEY (`id_inscription`),
-                               KEY `fk_inscription_evenement` (`ref_evenement`),
+                               UNIQUE KEY `uniq_inscription` (`ref_evenement`, `ref_utilisateur`),
                                KEY `fk_inscription_utilisateur` (`ref_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -171,8 +179,10 @@ CREATE TABLE `post` (
                         `date_heure` datetime DEFAULT CURRENT_TIMESTAMP,
                         `titre` varchar(150) DEFAULT NULL,
                         `ref_canal` int NOT NULL,
+                        `ref_utilisateur` int NOT NULL,
                         PRIMARY KEY (`id_post`),
-                        KEY `fk_post_canal` (`ref_canal`)
+                        KEY `fk_post_canal` (`ref_canal`),
+                        KEY `fk_post_utilisateur` (`ref_utilisateur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `reponse`;
@@ -209,9 +219,9 @@ ALTER TABLE `candidature`
 ALTER TABLE `etudiant`
     ADD CONSTRAINT `fk_etudiant_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
-ALTER TABLE `evenement`
-    ADD CONSTRAINT `fk_evenement_medecin` FOREIGN KEY (`ref_medecin`) REFERENCES `medecin` (`id_utilisateur`) ON DELETE SET NULL,
-  ADD CONSTRAINT `fk_evenement_partenaire` FOREIGN KEY (`ref_partenaire`) REFERENCES `partenaire` (`id_utilisateur`) ON DELETE SET NULL;
+ALTER TABLE `organisateur`
+    ADD CONSTRAINT `fk_organisateur_evenement` FOREIGN KEY (`ref_evenement`) REFERENCES `evenement` (`id_evenement`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_organisateur_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `gestionnaire`
     ADD CONSTRAINT `fk_gestionnaire_createur` FOREIGN KEY (`ref_gestionnaire_createur`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL,
@@ -235,7 +245,8 @@ ALTER TABLE `partenaire`
   ADD CONSTRAINT `fk_partenaire_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `post`
-    ADD CONSTRAINT `fk_post_canal` FOREIGN KEY (`ref_canal`) REFERENCES `canal` (`id_canal`) ON DELETE CASCADE;
+    ADD CONSTRAINT `fk_post_canal` FOREIGN KEY (`ref_canal`) REFERENCES `canal` (`id_canal`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_post_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE CASCADE;
 
 ALTER TABLE `reponse`
     ADD CONSTRAINT `fk_reponse_post` FOREIGN KEY (`ref_post`) REFERENCES `post` (`id_post`) ON DELETE CASCADE,
@@ -244,22 +255,5 @@ ALTER TABLE `reponse`
 ALTER TABLE `utilisateur`
     ADD CONSTRAINT `fk_utilisateur_gestionnaire` FOREIGN KEY (`ref_gestionnaire`) REFERENCES `gestionnaire` (`id_utilisateur`) ON DELETE SET NULL;
 
-SET FOREIGN_KEY_CHECKS = 1;-- =====================================================
--- Module Comptes (Younes)
--- =====================================================
-ALTER TABLE `utilisateur`
-    ADD `role` enum('etudiant','medecin','partenaire','gestionnaire') NOT NULL DEFAULT 'etudiant' AFTER `mdp`;
-
-ALTER TABLE `etudiant`
-    ADD `ref_etablissement` int DEFAULT NULL,
-  ADD KEY `fk_etudiant_etablissement` (`ref_etablissement`),
-  ADD CONSTRAINT `fk_etudiant_etablissement`
-    FOREIGN KEY (`ref_etablissement`) REFERENCES `etablissement` (`id_etablissement`) ON DELETE SET NULL;
-
--- Premier gestionnaire : admin@hsp.fr / Admin123!
-INSERT INTO `utilisateur` (nom, prenom, email, mdp, role, statut_validation)
-VALUES ('Admin', 'HSP', 'admin@hsp.fr',
-        '$2y$10$vtoa8sld0upJR7W2/a6Bf.eK.x6OzJOiAskRe.0mXy6p5atauMRXO',
-        'gestionnaire', 'valide');
-INSERT INTO `gestionnaire` (id_utilisateur) VALUES (LAST_INSERT_ID());
+SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;

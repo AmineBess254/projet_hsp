@@ -2,6 +2,12 @@
 
 class EvenementRepository
 {
+    private $connexionBdd;
+    public function __construct()
+    {
+        $this->connexionBdd = (new Bdd())->getConnexionBdd();
+    }
+
     public function getAllEvenements(){
         $sql = "SELECT * FROM evenement";
         $req = $this->connexionBdd->prepare($sql);
@@ -9,33 +15,34 @@ class EvenementRepository
         $results = $req->fetchAll();
         $tabEvenement = array();
         foreach ($results as $result) {
-            $evenement = new Evenement($result["id_evenement"],$result["type"],$result["titre"],$result["description"],$result["adresse"],$result["element_requis"],$result["nb_place"]);
+            $evenement = new Evenement($result["id_evenement"],$result["titre"],$result["type"],$result["description"],$result["adresse"],$result["element_requis"],$result["nb_place"]);
             $tabEvenement[] = $evenement;
         }
         return $tabEvenement;
     }
 
     public function ajouterEvenement(Evenement $evenement){
-        $sql= "INSERT INTO evenement (evenement, type, titre, description, adresse, element_requis, nb_place) 
-                Values (:evenement,:type,:titre,:description,:adresse,:element_requis,:nb_place)";
+        $sql= "INSERT INTO evenement  (titre,type, description, adresse, date_evenement, element_requis, nb_place) 
+                Values (:titre,:type,:description,:adresse,:date,:element_requis,:nb_place)";
         $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':evenement', $evenement->getEvenement());
-        $req->bindValue(':type', $evenement->getTypeEvenement());
         $req->bindValue(':titre', $evenement->getTitreEvenement());
+        $req->bindValue(':type', $evenement->getTypeEvenement());
         $req->bindValue(':description', $evenement->getDescriptionEvenement());
         $req->bindValue(':adresse', $evenement->getAdresseEvenement());
+        $req->bindValue(':date', $evenement->getDateEvenement());
         $req->bindValue(':element_requis', $evenement->getElementRequisEvenement());
         $req->bindValue(':nb_place', $evenement->getNbPlaceEvenement());
         $req->execute();
     }
     public function modifierEvenement(Evenement $evenement){
-        $sql= "UPDATE evenement SET evenement = :evenement, type = :type, titre = :titre, description = :description, adresse = :adresse, element_requis = :element_requis, nb_place = :nb_place";
+        $sql= "UPDATE evenement SET evenement = :evenement,  titre = :titre, type = :type, description = :description, adresse = :adresse, date_evenement=:date, element_requis = :element_requis, nb_place = :nb_place";
         $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':evenement', $evenement->getevenement());
+        $req->bindValue(':evenement', $evenement->getIdEvenement());
         $req->bindValue(':type', $evenement->getTypeEvenement());
         $req->bindValue(':titre', $evenement->getTitreEvenement());
         $req->bindValue(':description', $evenement->getDescriptionEvenement());
         $req->bindValue(':adresse', $evenement->getAdresseEvenement());
+        $req->bindValue(':date', $evenement->getDateEvenement());
         $req->bindValue(':element_requis', $evenement->getElementRequisEvenement());
         $req->bindValue(':nb_place', $evenement->getNbPlaceEvenement());
         $req->execute();
