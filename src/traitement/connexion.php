@@ -14,17 +14,23 @@ if ($utilisateur == null || !password_verify($_POST['mdp'], $utilisateur->getMdp
     exit;
 }
 
-// 3. Compte pas encore validé par un gestionnaire -> retour avec un autre message
+// 3. Compte désactivé ou refusé par un gestionnaire -> bloqué
+if ($utilisateur->getStatutValidation() == 'desactive' || $utilisateur->getStatutValidation() == 'refuse') {
+    header('Location: ../../public/connexion.php?erreur=bloque');
+    exit;
+}
+
+// 4. Compte pas encore validé par un gestionnaire -> retour avec un autre message
 if ($utilisateur->getStatutValidation() != 'valide') {
     header('Location: ../../public/connexion.php?erreur=attente');
     exit;
 }
 
-// 4. Tout est bon : on enregistre l'utilisateur dans la session
+// 5. Tout est bon : on enregistre l'utilisateur dans la session
 $_SESSION['id_utilisateur'] = $utilisateur->getIdUtilisateurs();
 $_SESSION['role'] = $utilisateur->getRole();
 $_SESSION['prenom'] = $utilisateur->getPrenom();
 
-// 5. On l'envoie sur la page d'accueil
+// 6. On l'envoie sur la page d'accueil
 header('Location: ../../public/index.php');
 exit;
