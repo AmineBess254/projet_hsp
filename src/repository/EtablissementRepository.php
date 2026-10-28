@@ -1,6 +1,6 @@
 <?php
 
-class EntrepriseRepository
+class EtablissementRepository
 {
     private $connexionBdd;
 
@@ -9,17 +9,18 @@ class EntrepriseRepository
         $this->connexionBdd = (new Bdd())->getConnexionBdd();
     }
 
-    // Transforme une ligne de la base en objet Entreprise
+    // Transforme une ligne de la base en objet Etablissement
+    // (ordre du constructeur : id, nom, adresse, site_web)
     private function creerObjet($result)
     {
-        return new Entreprise($result["id_entreprise"], $result["nom"], $result["site_web"], $result["adresse"]);
+        return new Etablissement($result["id_etablissement"], $result["nom"], $result["adresse"], $result["site_web"]);
     }
 
-    // Une entreprise par son id
-    public function getEntreprise($idEntreprise)
+    // Un établissement par son id
+    public function getEtablissement($idEtablissement)
     {
-        $req = $this->connexionBdd->prepare("SELECT * FROM entreprise WHERE id_entreprise = :id");
-        $req->bindValue(':id', $idEntreprise);
+        $req = $this->connexionBdd->prepare("SELECT * FROM etablissement WHERE id_etablissement = :id");
+        $req->bindValue(':id', $idEtablissement);
         $req->execute();
         $result = $req->fetch();
         if (!$result) {
@@ -28,10 +29,10 @@ class EntrepriseRepository
         return $this->creerObjet($result);
     }
 
-    // Liste de toutes les entreprises (pour le menu déroulant)
-    public function getAllEntreprise()
+    // Liste de tous les établissements (pour le menu déroulant du rattachement)
+    public function getAllEtablissement()
     {
-        $req = $this->connexionBdd->prepare("SELECT * FROM entreprise ORDER BY nom");
+        $req = $this->connexionBdd->prepare("SELECT * FROM etablissement ORDER BY nom");
         $req->execute();
         $liste = array();
         foreach ($req->fetchAll() as $result) {
@@ -40,10 +41,10 @@ class EntrepriseRepository
         return $liste;
     }
 
-    // Cherche une entreprise par son site web (contrôle des doublons)
-    public function getEntrepriseParSiteWeb($siteWeb)
+    // Cherche un établissement par son site web (contrôle des doublons)
+    public function getEtablissementParSiteWeb($siteWeb)
     {
-        $req = $this->connexionBdd->prepare("SELECT * FROM entreprise WHERE site_web = :site_web");
+        $req = $this->connexionBdd->prepare("SELECT * FROM etablissement WHERE site_web = :site_web");
         $req->bindValue(':site_web', $siteWeb);
         $req->execute();
         $result = $req->fetch();
@@ -53,37 +54,14 @@ class EntrepriseRepository
         return $this->creerObjet($result);
     }
 
-    // Vrai si une entreprise a déjà ce site web
-    public function siteWebExiste($siteWeb)
+    // Ajoute un établissement et renvoie son id
+    public function ajouterEtablissement(Etablissement $etablissement)
     {
-        return $this->getEntrepriseParSiteWeb($siteWeb) != null;
-    }
-
-    // Ajoute une entreprise et renvoie son id
-    public function ajouterEntreprise(Entreprise $entreprise)
-    {
-        $req = $this->connexionBdd->prepare("INSERT INTO entreprise (nom, site_web, adresse) VALUES (:nom, :site_web, :adresse)");
-        $req->bindValue(':nom', $entreprise->getNomEntreprise());
-        $req->bindValue(':site_web', $entreprise->getSiteWebEntreprise());
-        $req->bindValue(':adresse', $entreprise->getAdresseEntreprise());
+        $req = $this->connexionBdd->prepare("INSERT INTO etablissement (nom, adresse, site_web) VALUES (:nom, :adresse, :site_web)");
+        $req->bindValue(':nom', $etablissement->getNomEtablissement());
+        $req->bindValue(':adresse', $etablissement->getAdresseEtablissement());
+        $req->bindValue(':site_web', $etablissement->getSiteWebEtablissement());
         $req->execute();
         return $this->connexionBdd->lastInsertId();
-    }
-
-    public function modifierEntreprise(Entreprise $entreprise)
-    {
-        $req = $this->connexionBdd->prepare("UPDATE entreprise SET nom = :nom, site_web = :site_web, adresse = :adresse WHERE id_entreprise = :id");
-        $req->bindValue(':nom', $entreprise->getNomEntreprise());
-        $req->bindValue(':site_web', $entreprise->getSiteWebEntreprise());
-        $req->bindValue(':adresse', $entreprise->getAdresseEntreprise());
-        $req->bindValue(':id', $entreprise->getIdEntreprise());
-        $req->execute();
-    }
-
-    public function supprimerEntreprise(Entreprise $entreprise)
-    {
-        $req = $this->connexionBdd->prepare("DELETE FROM entreprise WHERE id_entreprise = :id");
-        $req->bindValue(':id', $entreprise->getIdEntreprise());
-        $req->execute();
     }
 }

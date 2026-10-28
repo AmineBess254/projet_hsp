@@ -2,9 +2,15 @@
 require_once '../src/bdd/Bdd.php';
 require_once '../src/modele/Hopital.php';
 require_once '../src/repository/HopitalRepository.php';
+require_once '../src/modele/Specialite.php';
+require_once '../src/repository/SpecialiteRepository.php';
 
+// Listes pour les menus déroulants du médecin (lues dans la base)
 $hopitalRepository = new HopitalRepository();
 $hopitaux = $hopitalRepository->getAllHopital();
+
+$specialiteRepository = new SpecialiteRepository();
+$specialites = $specialiteRepository->getAllSpecialite();
 
 include 'header.php';
 ?>
@@ -69,27 +75,10 @@ include 'header.php';
                         <div class="bloc-role" id="bloc-medecin">
                             <div class="mb-3">
                                 <label class="form-label">Spécialité</label>
-                                <select name="specialite" class="form-select">
-                                    <option>Cardiologue</option>
-                                    <option>Neurologue</option>
-                                    <option>Gastroentérologue</option>
-                                    <option>Dermatologue</option>
-                                    <option>Pédiatrie</option>
-                                    <option>Oncologue</option>
-                                    <option>Pneumologue</option>
-                                    <option>Rhumatologue</option>
-                                    <option>Endocrinologue</option>
-                                    <option>Ophtalmologue</option>
-                                    <option>Gynécologue</option>
-                                    <option>Psychiatre</option>
-                                    <option>Urologue</option>
-                                    <option>Néphrologue</option>
-                                    <option>Hématologue</option>
-                                    <option>Oto-rhino-laryngologue</option>
-                                    <option>Chirurgien orthopédique</option>
-                                    <option>Anesthésiologue</option>
-                                    <option>Médecin interne</option>
-                                    <option>Médecin généraliste</option>
+                                <select name="ref_specialite" class="form-select">
+                                    <?php foreach ($specialites as $specialite) { ?>
+                                        <option value="<?= $specialite->getIdSpecialite() ?>"><?= htmlspecialchars($specialite->getNomSpecialite()) ?></option>
+                                    <?php } ?>
                                 </select>
                             </div>
                             <div class="mb-3">

@@ -66,9 +66,9 @@ class EntrepriseRepository
     public function ajouterEntreprise(Entreprise $entreprise)
     {
         $sql = "INSERT INTO entreprise
-                (nom, site_web, adresse)
-                VALUES
-                (:nom, :site_web, :adresse)";
+            (nom, site_web, adresse)
+            VALUES
+            (:nom, :site_web, :adresse)";
 
         $req = $this->connexionBdd->prepare($sql);
 
@@ -77,8 +77,9 @@ class EntrepriseRepository
         $req->bindValue(':adresse', $entreprise->getAdresseEntreprise());
 
         $req->execute();
-    }
 
+        return $this->connexionBdd->lastInsertId();   // ← la ligne à ajouter
+    }
     public function modifierEntreprise(Entreprise $entreprise)
     {
         $sql = "UPDATE entreprise

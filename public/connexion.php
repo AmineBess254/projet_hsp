@@ -1,25 +1,4 @@
-<?php
-require_once __DIR__ .'/../src/bdd/Bdd.php';
-require_once __DIR__ . '/../src/modele/Utilisateurs.php';
-require_once __DIR__ . '/../src/repository/UtilisateursRepository.php';
-session_start();
-if (isset($_POST['email'], $_POST['mdp'])) {
-    $utilisateursRepository = new UtilisateursRepository();
-    $utilisateur = $utilisateursRepository->getUtilisateurParEmail($_POST['email']);
-    if ($utilisateur == null || !password_verify($_POST['mdp'], $utilisateur->getMdp())) {
-        header('Location: ../../public/connexion.php?erreur=identifiants');
-        exit();    }
-    if ($utilisateur->getStatutValidation() != 'valide') {
-        header('Location: connexion.php?erreur=attente');
-        exit();
-    }
-    $_SESSION['id_utilisateur'] = $utilisateur->getIdUtilisateurs();
-    $_SESSION['nom'] = $utilisateur->getNom();
-    $_SESSION['prenom'] = $utilisateur->getPrenom();
-    header('Location: index.php');
-    exit();
-}
-include 'header.php'; ?>
+<?php include 'header.php'; ?>
     <div class="row justify-content-center">
         <div class="col-md-5">
             <h1 class="mb-4">Connexion</h1>

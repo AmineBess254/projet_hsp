@@ -24,6 +24,10 @@ if ($role == 'etudiant' && (empty($_POST['formation']) || empty($_POST['cv']))) 
     header('Location: ../../public/inscription.php?erreur=champs');
     exit;
 }
+if ($role == 'medecin' && (empty($_POST['ref_specialite']) || empty($_POST['ref_hopital']))) {
+    header('Location: ../../public/inscription.php?erreur=champs');
+    exit;
+}
 if ($role == 'partenaire' && empty($_POST['poste'])) {
     header('Location: ../../public/inscription.php?erreur=champs');
     exit;
@@ -45,7 +49,7 @@ if ($role == 'etudiant') {
     $repository->ajouterEtudiant($idUtilisateur, $_POST['cv'], $_POST['formation']);
 }
 if ($role == 'medecin') {
-    $repository->ajouterMedecin($idUtilisateur, $_POST['specialite'], $_POST['ref_hopital']);
+    $repository->ajouterMedecin($idUtilisateur, $_POST['ref_specialite'], $_POST['ref_hopital']);
 }
 if ($role == 'partenaire') {
     $repository->ajouterPartenaire($idUtilisateur, $_POST['poste']);

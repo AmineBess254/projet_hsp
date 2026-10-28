@@ -73,11 +73,12 @@ class UtilisateursRepository
         $req->execute();
     }
 
-    public function ajouterMedecin($idUtilisateur, $specialite, $refHopital)
+    // Le médecin garde le numéro de sa spécialité (ref_specialite), pas son nom
+    public function ajouterMedecin($idUtilisateur, $refSpecialite, $refHopital)
     {
-        $req = $this->connexionBdd->prepare("INSERT INTO medecin (id_utilisateur, specialite, ref_hopital) VALUES (:id, :specialite, :hopital)");
+        $req = $this->connexionBdd->prepare("INSERT INTO medecin (id_utilisateur, ref_specialite, ref_hopital) VALUES (:id, :specialite, :hopital)");
         $req->bindValue(':id', $idUtilisateur);
-        $req->bindValue(':specialite', $specialite);
+        $req->bindValue(':specialite', $refSpecialite);
         $req->bindValue(':hopital', $refHopital);
         $req->execute();
     }
