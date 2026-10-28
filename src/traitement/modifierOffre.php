@@ -7,10 +7,10 @@ session_start();
 if (isset($_POST['id_offre'], $_POST['type_offre'], $_POST['titre'], $_POST['description'], $_POST['missions'])) {
     $offreRepository = new OffreRepository();
 
-    // 1. On va chercher l'offre actuelle dans la base
     $offre = $offreRepository->getOffre($_POST['id_offre']);
 
-    if ($offre != null) {
+    //  SÉCURITÉ : on modifie seulement si l'offre existe ET que la personne connectée est l'auteur
+    if ($offre != null && isset($_SESSION['id_utilisateur']) && $_SESSION['id_utilisateur'] == $offre->getRefUtilisateur()) {
         // Le salaire peut rester vide
         $salaire = $_POST['salaire'] ?? null;
         if ($salaire === '') {
