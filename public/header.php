@@ -18,7 +18,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Offres</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Événements</a></li>
+                <li class="nav-item"><a class="nav-link" href="listeEvenements.php">Événements</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Forum</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
 
