@@ -5,11 +5,13 @@ require_once '../src/modele/Post.php';
 require_once '../src/modele/DroitsForum.php';
 require_once '../src/repository/CanalRepository.php';
 require_once '../src/repository/PostRepository.php';
+require_once '../src/auth.php';
 exigerConnexion();
 
+$droits = new DroitsForum($_SESSION['role']);
 $canaux = array();
 foreach ((new CanalRepository())->getAllCanal() as $canal) {
-    if ($droits = peutLire($canal)) {
+    if ($droits ->peutLire($canal)) {
         $canaux[] = $canal;
     }
 }
