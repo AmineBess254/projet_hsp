@@ -7,13 +7,15 @@ class Post
     private $dateHeure;
     private $titre;
     private $refCanal;
+    private $refUtilisateur;
 
-    public function __construct($idPost = null,$contenu,$dateHeure = null,$titre = null,$refCanal){
+    public function __construct($idPost = null,$contenu,$dateHeure = null,$titre = null,$refCanal,$refUtilisateur){
         $this->idPost = $idPost;
         $this->contenu = $contenu;
         $this->dateHeure = $dateHeure;
         $this->titre = $titre;
         $this->refCanal = $refCanal;
+        $this->refUtilisateur = $refUtilisateur;
 
     }
     public function getIdPost(){
@@ -31,6 +33,9 @@ class Post
     public function getRefCanal(){
         return $this->refCanal;
     }
+    public function getRefUtilisateur(){
+        return $this->refUtilisateur;
+    }
     public function setIdPost($idPost){
         $this->idPost = $idPost;
     }
@@ -45,6 +50,9 @@ class Post
     }
     public function setRefCanal($refCanal){
         $this->refCanal = $refCanal;
+    }
+    public function setRefUtilisateur($refUtilisateur){
+        $this->refUtilisateur = $refUtilisateur;
     }
 
 }

@@ -72,8 +72,8 @@ class ReponseRepository
                 VALUES (:contenu, :ref_utilisateur, :ref_post)";
         $req = $this->connexionBdd->prepare($sql);
         $req->bindValue(':contenu', $reponse->getContenu());
-        $req->bindValue(':ref_utilisateur', $reponse->getIdUtilisateur());
-        $req->bindValue(':ref_post', $reponse->getIdPost());
+        $req->bindValue(':ref_utilisateur', $reponse->getRefUtilisateur());
+        $req->bindValue(':ref_post', $reponse->getRefPost());
         $req->execute();
         return $this->connexionBdd->lastInsertId();
     }

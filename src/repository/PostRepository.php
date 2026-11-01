@@ -65,7 +65,7 @@ class PostRepository
         return $tabPost;
     }
 
-  
+
     public function getPostParReponseUtilisateur($idUtilisateur)
     {
         $sql = "SELECT DISTINCT post.* FROM post
@@ -89,8 +89,8 @@ class PostRepository
         $req = $this->connexionBdd->prepare($sql);
         $req->bindValue(':contenu', $post->getContenu());
         $req->bindValue(':titre', $post->getTitre());
-        $req->bindValue(':ref_canal', $post->getIdCanal());
-        $req->bindValue(':ref_utilisateur', $post->getIdUtilisateur());
+        $req->bindValue(':ref_canal', $post->getRefCanal());
+        $req->bindValue(':ref_utilisateur', $post->getRefUtilisateur());
         $req->execute();
         return $this->connexionBdd->lastInsertId();
     }
