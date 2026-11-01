@@ -89,9 +89,7 @@ include 'header.php'
                 <?php foreach ($posts as $post) { ?>
                     <tr>
                         <td><?= htmlspecialchars($post->getTitre()) ?></td>
-                        <td><?= htmlspecialchars($post->getAuteur()) ?></td>
                         <td><?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?></td>
-                        <td><?= $post->getNbReponses() ?></td>
                         <td><a href="post.php?id=<?= $post->getIdPost() ?>" class="btn btn-sm btn-outline-primary">Ouvrir</a></td>
                     </tr>
                 <?php } ?>
