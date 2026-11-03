@@ -89,8 +89,9 @@ include 'header.php'
                 <?php foreach ($posts as $post) { ?>
                     <tr>
                         <td><?= htmlspecialchars($post->getTitre()) ?></td>
+                        <td><?= htmlspecialchars($_SESSION['prenom'])?></td>
                         <td><?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?></td>
-                        <td><a href="post.php?id=<?= $post->getIdPost() ?>" class="btn btn-sm btn-outline-primary">Ouvrir</a></td>
+                        <td><a href="posts.php?id=<?= $post->getIdPost() ?>" class="btn btn-sm btn-outline-primary">Ouvrir</a></td>
                     </tr>
                 <?php } ?>
                 </tbody>

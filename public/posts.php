@@ -11,16 +11,17 @@ require_once '../src/repository/ReponseRepository.php';
 exigerConnexion();
 $post = (new PostRepository())->getPost((int) ($_GET['id'] ?? 0));
 if($post != null){
-    $canal = (new CanalRepository())->getCanal($post->setRefCanal());
+    $canal = (new CanalRepository())->getCanal($post->getRefCanal());
 
 }
 $droits = (new DroitsForum($_SESSION['role']));
-if($post == null || $canal == null || $droits->peutLire($canal)){
+
+if($post == null || $canal == null || !$droits->peutLire($canal)){
     header("Location: forum.php");
     exit;
 }
-$reponses = (new ReponseRepository())->getReponse($post->getIdPost());
-$peutRepondre = $droits->peutLire($canal);
+$reponses = (new ReponseRepository())->getReponseParPost($post->getIdPost());
+$peutRepondre = $droits->peutRepondre($canal);
 include 'header.php';
 ?>
 <a href="forum.php?canal=<?= $canal->getIdCanal() ?>" class="text-decoration-none">← Retour au canal <?= htmlspecialchars($canal->getNomCanal()) ?></a>
@@ -41,7 +42,7 @@ include 'header.php';
         <span class="badge bg-info text-dark"><?= htmlspecialchars($canal->getNomCanal()) ?></span>
         <h1 class="h3 mt-2"><?= htmlspecialchars($post->getTitre()) ?></h1>
         <p class="text-muted small">
-            Par <?= htmlspecialchars($post->getAuteur()) ?> le <?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?>
+            Par <?= htmlspecialchars($_SESSION['prenom'])?> le <?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?>
         </p>
         <p class="mb-0"><?= nl2br(htmlspecialchars($post->getContenu())) ?></p>
     </div>
@@ -56,7 +57,7 @@ include 'header.php';
     <div class="card mb-2">
         <div class="card-body">
             <p class="text-muted small mb-1">
-                <?= htmlspecialchars($reponse->getAuteur()) ?> le <?= date('d/m/Y à H:i', strtotime($reponse->getDateHeure())) ?>
+                <?= htmlspecialchars($_SESSION['prenom']) ?> le <?= date('d/m/Y à H:i', strtotime($reponse->getDateHeure())) ?>
             </p>
             <p class="mb-0"><?= nl2br(htmlspecialchars($reponse->getContenu())) ?></p>
         </div>
