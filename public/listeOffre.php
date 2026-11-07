@@ -33,6 +33,7 @@ include 'header.php';
                     <?php } ?>
                     <h5 class="card-title mt-2"><?= htmlspecialchars($offre->getTitreOffre()) ?></h5>
                     <p class="card-text"><?= htmlspecialchars($offre->getDescriptionOffre()) ?></p>
+                    <a href="ficheOffre.php?id=<?= $offre->getIdOffre() ?>" class="btn btn-sm btn-primary">Voir l'offre</a>
                     <?php if ($offre->getSalaireOffre() != null) { ?>
                         <p class="fw-bold">Salaire : <?= $offre->getSalaireOffre() ?> €</p>
                     <?php } ?>

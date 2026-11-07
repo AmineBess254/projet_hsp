@@ -17,7 +17,33 @@ include 'header.php';
 <?php
 } else {
     ?>
+    <span class="badge bg-info text-dark text-uppercase"><?= $offre->getTypeOffre() ?></span>
+    <?php
+    if ($offre->getEtatOffre() == 'cloture') {
+        echo '<span class="badge bg-secondary">Clôturée</span>';
+    }
+    else {
+        echo '<span class="badge bg-success">Ouverte</span>';
+    }
+
+    ?>
+
+
     <h1><?= htmlspecialchars($offre->getTitreOffre()) ?></h1>
+    <p>Publiée le <?= $offre->getDateOffre() ?></p>
+
+    <h4>Description :</h4>
+    <p><?= htmlspecialchars($offre->getDescriptionOffre())?></p>
+
+    <h4>Mission :</h4>
+    <p><?=htmlspecialchars($offre->getMissionsOffre())?></p>
+
+    <?php
+    if($offre->getSalaireOffre() != null){ ?>
+        <h4>Salaire :</h4>>
+        <p><?= $offre->getSalaireOffre() ?>€</p>
+
+    <?php } ?>
 <?php
 }
 ?>
