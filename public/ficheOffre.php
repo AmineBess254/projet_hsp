@@ -40,8 +40,16 @@ include 'header.php';
 
     <?php
     if($offre->getSalaireOffre() != null){ ?>
-        <h4>Salaire :</h4>>
+        <h4>Salaire :</h4>
         <p><?= $offre->getSalaireOffre() ?>€</p>
+    <?php } ?>
+    <?php if (isset($_SESSION['id_utilisateur'], $_SESSION['role'])
+            && $_SESSION['role'] == 'partenaire'
+            && $_SESSION['id_utilisateur'] == $offre->getRefUtilisateur()
+            && $offre->getEtatOffre() == 'ouvert') { ?>
+
+        <a href="../src/traitement/cloturerOffre.php?id=<?= $offre->getIdOffre() ?>" class="btn btn-warning"
+           onclick="return confirm('Voulez-vous vraiment clôturer cette offre ?');">Clôturer l'offre</a>
 
     <?php } ?>
 <?php
