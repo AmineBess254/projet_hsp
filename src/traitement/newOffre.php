@@ -4,9 +4,10 @@ require_once '../modele/Offre.php';
 require_once '../repository/OffreRepository.php';
 session_start();
 
-//si pe rsonne n'est connecté, on fait comme si c'était l'utilisateur 1
-if (!isset($_SESSION['id_utilisateur'])) {
-    $_SESSION['id_utilisateur'] = 1;
+// SÉCURITÉ : seuls un partenaire ou un gestionnaire connecté peuvent publier
+if (!isset($_SESSION['id_utilisateur'], $_SESSION['role']) || !in_array($_SESSION['role'], ['partenaire'])) {
+    header('Location: ../../public/connexion.php');
+    exit();
 }
 
 if (isset($_POST['type_offre'], $_POST['titre'], $_POST['description'], $_POST['missions'])) {
