@@ -17,6 +17,11 @@ if ($repository->emailExiste($_POST['email'])) {
     header('Location: ../../public/gestion.php?erreur=email');
     exit;
 }
+// Le mot de passe doit faire au moins 8 caractères
+if (strlen($_POST['mdp']) < 8) {
+    header('Location: ../../public/gestion.php?erreur=mdp');
+    exit;
+}
 
 // 1. On crée le compte avec le rôle gestionnaire
 $mdpCrypte = password_hash($_POST['mdp'], PASSWORD_DEFAULT);

@@ -38,6 +38,11 @@ if ($repository->emailExiste($_POST['email'])) {
     header('Location: ../../public/inscription.php?erreur=email');
     exit;
 }
+// Le mot de passe doit faire au moins 8 caractères
+if (strlen($_POST['mdp']) < 8) {
+    header('Location: ../../public/inscription.php?erreur=mdp');
+    exit;
+}
 
 // 5. On enregistre l'utilisateur (mot de passe chiffré, compte "en_attente" par défaut)
 $mdpCrypte = password_hash($_POST['mdp'], PASSWORD_DEFAULT);

@@ -154,4 +154,96 @@ class UtilisateursRepository
         $req->bindValue(':id', $idUtilisateur);
         $req->execute();
     }
+
+    // =====================================================
+    // Modifier son profil
+    // =====================================================
+
+    // Un utilisateur par son id
+    public function getUtilisateur($idUtilisateur)
+    {
+        $req = $this->connexionBdd->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = :id");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+        $result = $req->fetch();
+        if (!$result) {
+            return null;
+        }
+        return $this->creerObjet($result);
+    }
+
+    // Les infos propres au rôle (formation et CV, spécialité et hôpital, ou poste)
+    // Renvoie un tableau, par exemple ['formation' => 'BTS SIO', 'cv' => 'https://...']
+    public function getProfilRole($idUtilisateur, $role)
+    {
+        // On n'accepte que ces 3 tables, pour ne jamais mettre n'importe quoi dans la requête
+        if ($role != 'etudiant' && $role != 'medecin' && $role != 'partenaire') {
+            return array();
+        }
+        $req = $this->connexionBdd->prepare("SELECT * FROM " . $role . " WHERE id_utilisateur = :id");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+        $result = $req->fetch();
+        if (!$result) {
+            return array();
+        }
+        return $result;
+    }
+
+    // Vrai si l'email est déjà pris par QUELQU'UN D'AUTRE (on peut garder son propre email)
+    public function emailExistePourAutre($email, $idUtilisateur)
+    {
+        $req = $this->connexionBdd->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = :email AND id_utilisateur != :id");
+        $req->bindValue(':email', $email);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+        return $req->fetchColumn() > 0;
+    }
+
+    // Modifie les infos communes
+    public function modifierUtilisateur($idUtilisateur, $nom, $prenom, $email)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE utilisateur SET nom = :nom, prenom = :prenom, email = :email WHERE id_utilisateur = :id");
+        $req->bindValue(':nom', $nom);
+        $req->bindValue(':prenom', $prenom);
+        $req->bindValue(':email', $email);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    // Modifie le mot de passe (déjà chiffré avec password_hash)
+    public function modifierMdp($idUtilisateur, $mdpCrypte)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE utilisateur SET mdp = :mdp WHERE id_utilisateur = :id");
+        $req->bindValue(':mdp', $mdpCrypte);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    // Modifie les infos propres à chaque rôle
+    public function modifierEtudiant($idUtilisateur, $cv, $formation)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE etudiant SET cv = :cv, formation = :formation WHERE id_utilisateur = :id");
+        $req->bindValue(':cv', $cv);
+        $req->bindValue(':formation', $formation);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    public function modifierMedecin($idUtilisateur, $refSpecialite, $refHopital)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE medecin SET ref_specialite = :specialite, ref_hopital = :hopital WHERE id_utilisateur = :id");
+        $req->bindValue(':specialite', $refSpecialite);
+        $req->bindValue(':hopital', $refHopital);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
+
+    public function modifierPartenaire($idUtilisateur, $poste)
+    {
+        $req = $this->connexionBdd->prepare("UPDATE partenaire SET poste = :poste WHERE id_utilisateur = :id");
+        $req->bindValue(':poste', $poste);
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+    }
 }
