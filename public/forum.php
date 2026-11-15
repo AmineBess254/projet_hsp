@@ -30,9 +30,21 @@ $peutPoster =false;
 if($canalAffiche != null) {
     $posts = (new PostRepository())->getPostParCanal($canalAffiche->getIdcanal());
     $peutPoster = $droits->peutPoster($canalAffiche);
+    }
+$posts = array();
+$peutPoster = false;
+$motCle = trim($_GET['keywords'] ?? '');
+if($canalAffiche != null) {
+    if($motCle != "") {
+        $posts = (new PostRepository())->rechercherPosts($canalAffiche->getIdcanal(), $motCle);
+    }else{
+        $posts = (new PostRepository())->getPostParCanal($canalAffiche->getIdcanal());
+    }
+    $peutPoster = $droits->peutPoster($canalAffiche);
 }
 include 'header.php'
 ?>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Forum</h1>
     <a href="" class="btn btn-outline-primary">Mes posts</a>
@@ -54,6 +66,21 @@ include 'header.php'
             </li>
         <?php } ?>
     </ul>
+    <form action="forum.php" method="get" class="mb-4">
+        <input type="hidden" name="canal" value="<?= $canalAffiche->getIdCanal() ?>">
+        <div class="input-group">
+            <input type="text" name="keywords" class="form-control" placeholder="Rechercher un mot-clé dans ce canal"
+                   value="<?= htmlspecialchars($motCle) ?>">
+            <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+        </div>
+    </form>
+    <?php if ($motCle != '') { ?>
+        <p class="text-muted">
+            <?= count($posts) ?> résultat(s) pour « <?= htmlspecialchars($motCle) ?> »
+            <a href="forum.php?canal=<?= $canalAffiche->getIdCanal() ?>">Effacer la recherche</a>
+        </p>
+    <?php } ?>
+
 
     <?php if ($peutPoster) { ?>
         <div class="card mb-4">

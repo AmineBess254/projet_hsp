@@ -2,9 +2,9 @@
 class DroitsForum
 {
     private $role;
-    private $lecture = ['Général' => ['etudiant','medecins','partenaire','gestionnaire'],'Médecin' => ['medecins','partenaire'],'Étudiants'=> ['etudiant', 'medecins'] , ];
-    private $creationPost = ['Général' => ['etudiant','medecins','partenaire','gestionnaire'],'Médecin' => ['medecins','partenaire'],'Étudiants'=> ['etudiant'] , ];
-    private $reponse = ['Général' => ['etudiant','medecins','partenaire','gestionnaire'],'Médecin' => ['medecins','partenaire'],'Étudiants'=> ['etudiant', 'medecins'] , ];
+    private $lecture = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant', 'medecin'] , ];
+    private $creationPost = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant'] , ];
+    private $reponse = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant', 'medecin'] , ];
 
 public function __construct($role){
     $this->role = $role;
