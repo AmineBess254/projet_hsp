@@ -1,6 +1,10 @@
 </main>
 <footer class="bg-light text-center py-3 mt-5">
     <p class="mb-0">© 2026 Générale des Hôpitaux - Hôpital Sud Paris</p>
+    <p class="mb-0 small">
+        <a href="mentionsLegales.php">Mentions légales</a> -
+        <a href="politiqueConfidentialite.php">Politique de confidentialité</a>
+    </p>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
