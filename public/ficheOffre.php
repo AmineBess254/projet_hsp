@@ -35,7 +35,7 @@ include 'header.php';
     <div class="alert alert-danger">Cette offre n'existe pas.</div>
 
 <?php } else { ?>
-
+<br>
     <!-- ===== Les badges : type + état ===== -->
     <span class="badge bg-info text-dark text-uppercase"><?= $offre->getTypeOffre() ?></span>
 
@@ -80,6 +80,37 @@ include 'header.php';
            class="btn btn-warning"
            onclick="return confirm('Voulez-vous vraiment clôturer cette offre ?');">
             Clôturer l'offre
+        </a>
+
+    <?php } ?>
+    <!-- ===== Bouton ouverture : seulement l'entreprise auteure, si l'offre est ferme ===== -->
+
+
+    <?php if (
+            isset($_SESSION['id_utilisateur'], $_SESSION['role'])
+            && $_SESSION['role'] == 'partenaire'
+            && $_SESSION['id_utilisateur'] == $offre->getRefUtilisateur()
+            && $offre->getEtatOffre() == 'cloture'
+    ) { ?>
+
+        <a href="../src/traitement/ouvertOffre.php?id=<?= $offre->getIdOffre() ?>"
+           class="btn btn-warning"
+           onclick="return confirm('Voulez-vous vraiment ouvrir cette offre ?');">
+            Ouverture de l'offre
+        </a>
+
+    <?php } ?>
+
+    <!-- ===== Bouton candidature : seulement l'entreprise auteure, si l'offre est ferme ===== -->
+
+    <?php if (
+            isset($_SESSION['id_utilisateur'], $_SESSION['role'])
+            && $_SESSION['role'] == 'partenaire'
+            && $_SESSION['id_utilisateur'] == $offre->getRefUtilisateur()
+    ) { ?>
+
+        <a href="candidaturesOffre.php?id=<?= $offre->getIdOffre() ?>" class="btn btn-primary">
+            Afficher les candidatures
         </a>
 
     <?php } ?>

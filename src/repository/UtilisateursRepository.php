@@ -27,6 +27,18 @@ class UtilisateursRepository
         }
         return $this->creerObjet($result);
     }
+    // Cherche un utilisateur par son numéro (sert à afficher les candidats)
+    public function getUtilisateurParId($idUtilisateur)
+    {
+        $req = $this->connexionBdd->prepare("SELECT * FROM utilisateur WHERE id_utilisateur = :id");
+        $req->bindValue(':id', $idUtilisateur);
+        $req->execute();
+        $result = $req->fetch();
+        if (!$result) {
+            return null;
+        }
+        return $this->creerObjet($result);
+    }
 
     // Liste des comptes à valider (sert au gestionnaire)
     public function getUtilisateursEnAttente()
