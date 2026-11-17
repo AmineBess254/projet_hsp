@@ -3,9 +3,13 @@ require_once '../src/auth.php';
 require_once '../src/bdd/Bdd.php';
 require_once '../src/modele/Evenement.php';
 require_once '../src/repository/EvenementRepository.php';
+require_once '../src/modele/Actualite.php';
+require_once '../src/repository/ActualiteRepository.php';
 
 // Les 3 prochains événements pour la page d'accueil
 $prochainsEvenements = (new EvenementRepository())->getProchainsEvenements(3);
+// Les 3 dernières actualités publiées par les gestionnaires
+$actualites = (new ActualiteRepository())->getDernieresActualites(3);
 
 include 'header.php';
 
@@ -37,7 +41,21 @@ include 'header.php';
                 </div>
             </div>
         </div>
-    </div> <h2 class="mt-4">Prochains événements</h2>
+    </div> <h2 class="mt-4">Actualités</h2>
+    <?php if (count($actualites) == 0) { ?>
+        <p class="text-muted">Aucune actualité pour le moment.</p>
+    <?php } ?>
+    <?php foreach ($actualites as $actualite) { ?>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><?= htmlspecialchars($actualite->getTitre()) ?></h5>
+                <p class="text-muted small mb-2">Publié le <?= date('d/m/Y', strtotime($actualite->getDatePublication())) ?></p>
+                <p class="card-text"><?= nl2br(htmlspecialchars($actualite->getContenu())) ?></p>
+            </div>
+        </div>
+    <?php } ?>
+
+    <h2 class="mt-4">Prochains événements</h2>
     <?php if (count($prochainsEvenements) == 0) { ?>
         <p class="text-muted">Aucun événement à venir pour le moment.</p>
     <?php } else { ?>

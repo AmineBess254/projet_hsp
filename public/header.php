@@ -23,6 +23,7 @@
 
                 <?php if (estConnecte() && $_SESSION['role'] == 'gestionnaire') { ?>
                     <li class="nav-item"><a class="nav-link" href="gestion.php">Gestion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="gestionActualites.php">Actualités</a></li>
                 <?php } ?>
             </ul>
 
