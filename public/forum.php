@@ -50,7 +50,7 @@ include 'header.php'
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Forum</h1>
-    <a href="" class="btn btn-outline-primary">Mes posts</a>
+    <a href="mesPosts.php" class="btn btn-outline-primary">Mes posts</a>
 </div>
 
 <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'champs') { ?>

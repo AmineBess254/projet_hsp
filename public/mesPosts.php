@@ -8,13 +8,19 @@ require_once '../src/repository/PostRepository.php';
 exigerConnexion();
 
 $idUtilisateur = $_SESSION['id_utilisateur'];
+
 $postRepository = new PostRepository();
+
 $mesPosts = $postRepository->getPostParUtilisateur($idUtilisateur);
+
 $postsRepondus = $postRepository->getPostParReponseUtilisateur($idUtilisateur);
+
+
 $nomsCanaux = array();
 foreach ((new CanalRepository())->getAllCanal() as $canal) {
     $nomsCanaux[$canal->getIdCanal()] = $canal->getNomCanal();
 }
+
 include 'header.php';
 ?>
 
@@ -66,4 +72,5 @@ include 'header.php';
         </table>
     </div>
 <?php } ?>
+
 <?php include 'footer.php'; ?>
