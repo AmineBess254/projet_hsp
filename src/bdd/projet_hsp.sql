@@ -284,5 +284,8 @@ INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `role`, `statut_vali
     ('Martin', 'Sophie', 'medecin@hsp.fr', '$2y$10$WU1sSdUGOhvpAXd9ddfXQOihu1qrsOV17c1XJVXM2LBO7BJggXFsG', 'medecin', 'valide');
 INSERT INTO `medecin` (`id_utilisateur`, `ref_specialite`, `ref_hopital`) VALUES
     (LAST_INSERT_ID(), 1, 1);
-
+-- Gestionnaire de test : gestionnaire@hsp.fr / gestionnaire123
+INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `role`, `statut_validation`) VALUES
+    ('Bernard', 'Claire', 'gestionnaire@hsp.fr', '$2y$10$RtncGpTuPL6ixkudRjII5udfp5wUPJedpLYQh5BhP3pwC3hzobRlC', 'gestionnaire', 'valide');
+INSERT INTO `gestionnaire` (`id_utilisateur`) VALUES (LAST_INSERT_ID());
 SET FOREIGN_KEY_CHECKS = 1;
