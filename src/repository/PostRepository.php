@@ -65,7 +65,7 @@ class PostRepository
         return $tabPost;
     }
 
-
+  
     public function getPostParReponseUtilisateur($idUtilisateur)
     {
         $sql = "SELECT DISTINCT post.* FROM post
@@ -82,25 +82,6 @@ class PostRepository
         return $tabPost;
     }
 
-
-    public function rechercherPosts($idCanal, $motCle)
-    {
-        $sql = "SELECT * FROM post
-                WHERE ref_canal = :ref_canal
-                AND (titre LIKE :mot_titre OR contenu LIKE :mot_contenu)
-                ORDER BY date_heure DESC";
-        $req = $this->connexionBdd->prepare($sql);
-        $req->bindValue(':ref_canal', $idCanal);
-        $req->bindValue(':mot_titre', '%' . $motCle . '%');
-        $req->bindValue(':mot_contenu', '%' . $motCle . '%');
-        $req->execute();
-        $tabPost = array();
-        foreach ($req->fetchAll() as $result) {
-            $tabPost[] = $this->creerPost($result);
-        }
-        return $tabPost;
-    }
-
     public function ajouterPost(Post $post)
     {
         $sql = "INSERT INTO post (contenu, titre, ref_canal, ref_utilisateur)
@@ -108,8 +89,8 @@ class PostRepository
         $req = $this->connexionBdd->prepare($sql);
         $req->bindValue(':contenu', $post->getContenu());
         $req->bindValue(':titre', $post->getTitre());
-        $req->bindValue(':ref_canal', $post->getRefCanal());
-        $req->bindValue(':ref_utilisateur', $post->getRefUtilisateur());
+        $req->bindValue(':ref_canal', $post->getIdCanal());
+        $req->bindValue(':ref_utilisateur', $post->getIdUtilisateur());
         $req->execute();
         return $this->connexionBdd->lastInsertId();
     }

@@ -7,22 +7,17 @@ class Reponse
     private $dateHeure;
     private $refUtilisateur;
     private $refPost;
-    private $auteur;
 
 
-    public function __construct($idReponse = null,$contenu,$dateHeure = null ,$refUtilisateur,$refPost,$auteur = null){
+    public function __construct($idReponse = null,$contenu,$dateHeure = null ,$refUtilisateur,$refPost){
         $this->idReponse=$idReponse;
         $this->contenu=$contenu;
         $this->dateHeure=$dateHeure;
         $this->refUtilisateur=$refUtilisateur;
         $this->refPost=$refPost;
-        $this->auteur=$auteur;
 
     }
 
-    public function getAuteur(){
-        return $this->auteur;
-    }
     public function getIdReponse(){
         return $this->idReponse;
     }

@@ -9,6 +9,3 @@ if (isset($_POST['contenu'], $_POST['ref_post'])) {
     $reponseRepository = new ReponseRepository();
     $reponseRepository->ajouterReponse($reponse);
 }
-
-header('Location: ../../public/posts.php?id=' . $_POST['ref_post'] . '&ok=reponse');
-exit;
