@@ -74,6 +74,7 @@ include 'header.php';
             <?php } ?>
         </div>
     <?php } ?>
-        <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+    <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+
 
     <?php include 'footer.php'; ?>
