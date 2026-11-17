@@ -28,6 +28,7 @@
 
             <?php if (estConnecte()) { ?>
                 <span class="navbar-text text-white me-3">Bonjour <?= htmlspecialchars($_SESSION['prenom']) ?></span>
+                <a class="btn btn-light me-2" href="profil.php">Mon profil</a>
                 <a class="btn btn-outline-light" href="deconnexion.php">Déconnexion</a>
             <?php } else { ?>
                 <a class="btn btn-light me-2" href="connexion.php">Connexion</a>

@@ -43,6 +43,9 @@ include 'header.php';
                     <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'mdp') { ?>
                         <div class="alert alert-danger">Mot de passe actuel incorrect.</div>
                     <?php } ?>
+                    <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'suppression') { ?>
+                        <div class="alert alert-danger">Mot de passe incorrect : le compte n'a pas été supprimé.</div>
+                    <?php } ?>
                     <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'mdpcourt') { ?>
                         <div class="alert alert-danger">Le nouveau mot de passe doit faire au moins 8 caractères.</div>
                     <?php } ?>
@@ -129,6 +132,21 @@ include 'header.php';
 
                         <button type="submit" class="btn btn-primary w-100 mt-2">Enregistrer</button>
                     </form>
+
+                    <!-- Supprimer son compte (RGPD) : pas pour les gestionnaires -->
+                    <?php if ($role != 'gestionnaire') { ?>
+                        <hr class="my-4">
+                        <h2 class="h6 text-danger">Supprimer mon compte</h2>
+                        <p class="text-muted small">Toutes vos données (profil, offres, candidatures, messages...) seront effacées définitivement.</p>
+                        <form action="../src/traitement/supprimerMonCompte.php" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Confirmez avec votre mot de passe</label>
+                                <input type="password" name="mdp" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-danger w-100"
+                                    onclick="return confirm('Supprimer définitivement votre compte ?');">Supprimer mon compte</button>
+                        </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
