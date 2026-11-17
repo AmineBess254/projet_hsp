@@ -24,15 +24,40 @@ class EvenementRepository
 
     // ---------------------------------------------------------------- Événements
 
-    public function getAllEvenements()
+    // Tous les événements, avec des filtres facultatifs :
+    // $type = un type précis (ex : 'salon'), $dateMin = seulement à partir de cette date
+    public function getAllEvenements($type = null, $dateMin = null)
     {
-        $req = $this->connexionBdd->prepare($this->selectEvenement . " ORDER BY e.date_evenement");
+        $sql = $this->selectEvenement . " WHERE 1 = 1";
+        if ($type != null) {
+            $sql .= " AND e.type = :type";
+        }
+        if ($dateMin != null) {
+            $sql .= " AND e.date_evenement >= :date_min";
+        }
+        $sql .= " ORDER BY e.date_evenement";
+
+        $req = $this->connexionBdd->prepare($sql);
+        if ($type != null) {
+            $req->bindValue(':type', $type);
+        }
+        if ($dateMin != null) {
+            $req->bindValue(':date_min', $dateMin);
+        }
         $req->execute();
         $tabEvenement = array();
         foreach ($req->fetchAll() as $result) {
             $tabEvenement[] = $this->creerObjet($result);
         }
         return $tabEvenement;
+    }
+
+    // Liste des types existants, sans doublons, pour la liste déroulante du filtre
+    public function getTypesEvenements()
+    {
+        $req = $this->connexionBdd->prepare("SELECT DISTINCT type FROM evenement WHERE type IS NOT NULL ORDER BY type");
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_COLUMN);
     }
 
     // Les prochains événements (aujourd'hui ou plus tard), pour la page d'accueil
@@ -242,5 +267,14 @@ class EvenementRepository
         $req->bindValue(':id', $idInscription, PDO::PARAM_INT);
         $req->bindValue(':ref_evenement', $idEvenement, PDO::PARAM_INT);
         $req->execute();
+    }
+
+    // Email et prénom d'un utilisateur (pour l'email de confirmation)
+    public function getContactUtilisateur($idUtilisateur)
+    {
+        $req = $this->connexionBdd->prepare("SELECT email, prenom FROM utilisateur WHERE id_utilisateur = :id");
+        $req->bindValue(':id', $idUtilisateur, PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetch();
     }
 }

@@ -37,6 +37,9 @@ include 'header.php';
 <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'email') { ?>
     <div class="alert alert-danger">Cet email est déjà utilisé.</div>
 <?php } ?>
+<?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'mdp') { ?>
+    <div class="alert alert-danger">Le mot de passe doit faire au moins 8 caractères.</div>
+<?php } ?>
 
     <!-- Partie 1 : les comptes à valider -->
     <h2 class="h5">Comptes en attente de validation</h2>

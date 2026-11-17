@@ -8,6 +8,7 @@ require_once '../src/repository/EvenementRepository.php';
 $prochainsEvenements = (new EvenementRepository())->getProchainsEvenements(3);
 
 include 'header.php';
+
 ?>
     <div class="p-5 mb-4 bg-light rounded-3">
         <h1 class="display-5 fw-bold">Bienvenue sur la plateforme HSP</h1>
@@ -55,5 +56,11 @@ include 'header.php';
             <?php } ?>
         </div>
     <?php } ?>
+<<<<<<< HEAD
     <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
 <?php include 'footer.php'; ?>
+=======
+        <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+
+    <?php include 'footer.php'; ?>
+>>>>>>> origin/main

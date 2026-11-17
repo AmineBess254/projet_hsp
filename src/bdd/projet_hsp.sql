@@ -134,17 +134,24 @@ CREATE TABLE `medecin` (
                            KEY `fk_medecin_etablissement` (`ref_etablissement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `statut_validation`, `role`) VALUES
-    ('Martin', 'Sophie', 'medecin@hsp.fr', '$2y$10$WU1sSdUGOhvpAXd9ddfXQOihu1qrsOV17c1XJVXM2LBO7BJggXFsG', 'valide', 'medecin');
-INSERT INTO `medecin` (`id_utilisateur`, `ref_specialite`, `ref_hopital`) VALUES
-    (LAST_INSERT_ID(), 1, 1);
-
 DROP TABLE IF EXISTS `specialite`;
+
 CREATE TABLE `specialite` (
                               `id_specialite` int NOT NULL AUTO_INCREMENT,
                               `nom` varchar(100) NOT NULL,
                               PRIMARY KEY (`id_specialite`),
                               UNIQUE KEY `nom` (`nom`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `actualite`;
+CREATE TABLE `actualite` (
+                             `id_actualite` int NOT NULL AUTO_INCREMENT,
+                             `titre` varchar(150) NOT NULL,
+                             `contenu` text NOT NULL,
+                             `date_publication` datetime DEFAULT CURRENT_TIMESTAMP,
+                             `ref_utilisateur` int DEFAULT NULL,
+                             PRIMARY KEY (`id_actualite`),
+                             KEY `fk_actualite_utilisateur` (`ref_utilisateur`),
+                             CONSTRAINT `fk_actualite_utilisateur` FOREIGN KEY (`ref_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Les 20 spécialités du sujet
@@ -263,5 +270,19 @@ ALTER TABLE `utilisateur`
     ADD `role` enum('etudiant','medecin','partenaire','gestionnaire') NOT NULL DEFAULT 'etudiant' AFTER `mdp`,
     MODIFY `statut_validation` enum('en_attente','valide','refuse','desactive') NOT NULL DEFAULT 'en_attente';
 
+-- =====================================================
+-- Comptes de test (TOUJOURS à la fin, quand toutes les tables existent)
+-- =====================================================
+
+-- Premier gestionnaire : admin@hsp.fr / Admin123!
+INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `role`, `statut_validation`) VALUES
+    ('Admin', 'HSP', 'admin@hsp.fr', '$2y$10$vtoa8sld0upJR7W2/a6Bf.eK.x6OzJOiAskRe.0mXy6p5atauMRXO', 'gestionnaire', 'valide');
+INSERT INTO `gestionnaire` (`id_utilisateur`) VALUES (LAST_INSERT_ID());
+
+-- Médecin de test : medecin@hsp.fr (Cardiologue, Hôpital Sud Paris)
+INSERT INTO `utilisateur` (`nom`, `prenom`, `email`, `mdp`, `role`, `statut_validation`) VALUES
+    ('Martin', 'Sophie', 'medecin@hsp.fr', '$2y$10$WU1sSdUGOhvpAXd9ddfXQOihu1qrsOV17c1XJVXM2LBO7BJggXFsG', 'medecin', 'valide');
+INSERT INTO `medecin` (`id_utilisateur`, `ref_specialite`, `ref_hopital`) VALUES
+    (LAST_INSERT_ID(), 1, 1);
+
 SET FOREIGN_KEY_CHECKS = 1;
-COMMIT;

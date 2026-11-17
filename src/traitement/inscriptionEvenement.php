@@ -3,6 +3,7 @@ require_once '../auth.php';
 require_once '../bdd/Bdd.php';
 require_once '../modele/Evenement.php';
 require_once '../repository/EvenementRepository.php';
+require_once '../mail/Mailer.php';
 
 $idEvenement = (int) ($_POST['id_evenement'] ?? 0);
 $action = $_POST['action'] ?? '';
@@ -36,6 +37,9 @@ if ($evenement->estPasse()) {
 if ($action == 'inscrire') {
     $resultat = $evenementRepository->inscrire($idEvenement, $_SESSION['id_utilisateur']);
     if ($resultat == 'ok') {
+        // Email de confirmation (si l'envoi échoue, l'inscription reste valide)
+        $contact = $evenementRepository->getContactUtilisateur($_SESSION['id_utilisateur']);
+        Mailer::envoyerConfirmationInscription($contact['email'], $contact['prenom'], $evenement);
         header('Location: ' . $fiche . '&ok=inscrit');
     } else {
         header('Location: ' . $fiche . '&erreur=' . $resultat);
