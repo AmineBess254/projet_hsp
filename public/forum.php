@@ -6,6 +6,8 @@ require_once '../src/modele/DroitsForum.php';
 require_once '../src/repository/CanalRepository.php';
 require_once '../src/repository/PostRepository.php';
 require_once '../src/auth.php';
+require_once '../src/modele/Utilisateurs.php';
+require_once '../src/repository/UtilisateursRepository.php';
 exigerConnexion();
 
 $droits = new DroitsForum($_SESSION['role']);
@@ -42,6 +44,7 @@ if($canalAffiche != null) {
     }
     $peutPoster = $droits->peutPoster($canalAffiche);
 }
+$utilisateursRepository = new UtilisateursRepository();
 include 'header.php'
 ?>
 
@@ -116,7 +119,7 @@ include 'header.php'
                 <?php foreach ($posts as $post) { ?>
                     <tr>
                         <td><?= htmlspecialchars($post->getTitre()) ?></td>
-                        <td><?= htmlspecialchars($_SESSION['prenom'])?></td>
+                        <td><?= htmlspecialchars($utilisateursRepository->getNomComplet($post->getRefUtilisateur())) ?></td>
                         <td><?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?></td>
                         <td><a href="posts.php?id=<?= $post->getIdPost() ?>" class="btn btn-sm btn-outline-primary">Ouvrir</a></td>
                     </tr>
