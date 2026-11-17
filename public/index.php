@@ -56,11 +56,7 @@ include 'header.php';
             <?php } ?>
         </div>
     <?php } ?>
-<<<<<<< HEAD
     <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
-<?php include 'footer.php'; ?>
-=======
-        <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+
 
     <?php include 'footer.php'; ?>
->>>>>>> origin/main
