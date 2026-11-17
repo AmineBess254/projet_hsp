@@ -39,3 +39,4 @@
     </div>
 </nav>
 <main class="container my-4">
+    <link href="css/style.css" rel="stylesheet">

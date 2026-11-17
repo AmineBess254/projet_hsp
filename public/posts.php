@@ -8,7 +8,9 @@ require_once '../src/modele/DroitsForum.php';
 require_once '../src/repository/CanalRepository.php';
 require_once '../src/repository/PostRepository.php';
 require_once '../src/repository/ReponseRepository.php';
+require_once '../src/repository/UtilisateursRepository.php';
 exigerConnexion();
+$utilisateursRepository = new UtilisateursRepository();
 $post = (new PostRepository())->getPost((int) ($_GET['id'] ?? 0));
 if($post != null){
     $canal = (new CanalRepository())->getCanal($post->getRefCanal());
@@ -57,7 +59,7 @@ include 'header.php';
     <div class="card mb-2">
         <div class="card-body">
             <p class="text-muted small mb-1">
-                <?= htmlspecialchars($_SESSION['prenom']) ?> le <?= date('d/m/Y à H:i', strtotime($reponse->getDateHeure())) ?>
+                <?= htmlspecialchars($utilisateursRepository->getNomComplet($post->getRefUtilisateur())) ?> le <?= date('d/m/Y à H:i', strtotime($reponse->getDateHeure())) ?>
             </p>
             <p class="mb-0"><?= nl2br(htmlspecialchars($reponse->getContenu())) ?></p>
         </div>
