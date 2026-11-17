@@ -27,6 +27,9 @@ include 'header.php';
                     <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'email') { ?>
                         <div class="alert alert-danger">Cet email est déjà utilisé.</div>
                     <?php } ?>
+                    <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'mdp') { ?>
+                        <div class="alert alert-danger">Le mot de passe doit faire au moins 8 caractères.</div>
+                    <?php } ?>
                     <?php if (isset($_GET['erreur']) && $_GET['erreur'] == 'champs') { ?>
                         <div class="alert alert-danger">Merci de remplir tous les champs.</div>
                     <?php } ?>
