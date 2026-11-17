@@ -7,7 +7,7 @@ require_once '../src/modele/Actualite.php';
 require_once '../src/repository/ActualiteRepository.php';
 
 // Les 3 prochains événements pour la page d'accueil
-$prochainsEvenements = (new EvenementRepository())->getProchainsEvenements(3);
+$prochainsEvenements = (new EvenementRepository())->getProchainsEvenements();
 // Les 3 dernières actualités publiées par les gestionnaires
 $actualites = (new ActualiteRepository())->getDernieresActualites(3);
 
@@ -74,6 +74,7 @@ include 'header.php';
             <?php } ?>
         </div>
     <?php } ?>
-        <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+    <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+
 
     <?php include 'footer.php'; ?>
