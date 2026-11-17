@@ -11,9 +11,10 @@ if(isset($_GET['id'])){
 
     $offre= $OffreRepository->getOffre($_GET['id']);
 
-    if($offre != null && isset($_SESSION['id_utilisateur'])&& $_SESSION['id_utilisateur']==$offre->getRefUtilisateur()) {
+    if($offre != null && isset($_SESSION['id_utilisateur'])&& $_SESSION['id_utilisateur']==$offre->getRefUtilisateur()){
         $offre->setEtatOffre('cloture');
         $OffreRepository->modifierOffre($offre);
-    }
+
 }
 header("Location: ../../public/ficheOffre.php?id=".$_GET['id']);
+}
