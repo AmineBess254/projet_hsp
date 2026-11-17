@@ -1,0 +1,118 @@
+/* =====================================================
+   Style du site HSP (s'ajoute par-dessus Bootstrap)
+   ===================================================== */
+
+/* ---------- Couleurs du site (à changer ici, une seule fois) ---------- */
+:root {
+    --couleur-principale: #0b6e8a;   /* bleu santé */
+    --couleur-foncee: #08546a;       /* bleu plus foncé (survol) */
+    --couleur-claire: #e8f4f7;       /* bleu très clair (fonds) */
+    --couleur-fond: #f5f7fa;         /* gris très clair (fond de page) */
+}
+
+/* ---------- Page ---------- */
+body {
+    background-color: var(--couleur-fond);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+h1, h2, h3 {
+    color: var(--couleur-foncee);
+}
+
+/* ---------- Menu du haut ---------- */
+.navbar {
+    background-color: var(--couleur-principale) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
+    text-decoration: underline;
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+    border-radius: 8px;
+}
+
+.btn-primary {
+    background-color: var(--couleur-principale);
+    border-color: var(--couleur-principale);
+}
+
+.btn-primary:hover {
+    background-color: var(--couleur-foncee);
+    border-color: var(--couleur-foncee);
+}
+
+.btn-outline-primary {
+    color: var(--couleur-principale);
+    border-color: var(--couleur-principale);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--couleur-principale);
+    border-color: var(--couleur-principale);
+}
+
+/* ---------- Cartes (offres, événements, actualités...) ---------- */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* La carte se soulève un peu au survol de la souris */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- Grand cadre de la page d'accueil ---------- */
+.bg-light.rounded-3 {
+    background-color: var(--couleur-claire) !important;
+    border-left: 6px solid var(--couleur-principale);
+}
+
+/* ---------- Champs des formulaires ---------- */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 0 0.2rem rgba(11, 110, 138, 0.25);
+}
+
+/* ---------- Tableaux (page gestion) ---------- */
+.table th {
+    background-color: var(--couleur-claire);
+    color: var(--couleur-foncee);
+}
+
+/* ---------- Liens ---------- */
+a {
+    color: var(--couleur-principale);
+}
+
+a:hover {
+    color: var(--couleur-foncee);
+}
+
+/* ---------- Pied de page ---------- */
+footer {
+    background-color: var(--couleur-foncee) !important;
+    color: #ffffff;
+}
+
+footer a {
+    color: #cde8ef;
+}
+
+footer a:hover {
+    color: #ffffff;
+}
