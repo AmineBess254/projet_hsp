@@ -1,4 +1,12 @@
 <?php
+require_once '../src/auth.php';
+
+// Déjà connecté ? On le renvoie vers l'accueil
+if (estConnecte()) {
+    header('Location: index.php');
+    exit;
+}
+
 require_once '../src/bdd/Bdd.php';
 require_once '../src/modele/Hopital.php';
 require_once '../src/repository/HopitalRepository.php';

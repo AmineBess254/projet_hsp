@@ -1,4 +1,14 @@
-<?php include 'header.php'; ?>
+<?php
+require_once '../src/auth.php';
+
+// Déjà connecté ? On le renvoie vers l'accueil
+if (estConnecte()) {
+    header('Location: index.php');
+    exit;
+}
+
+include 'header.php';
+?>
     <div class="row justify-content-center">
         <div class="col-md-5">
             <h1 class="mb-4">Connexion</h1>
