@@ -19,7 +19,7 @@
                 <li class="nav-item"><a class="nav-link" href="listeOffre.php">Offres</a></li>
                 <li class="nav-item"><a class="nav-link" href="listeEvenements.php">Événements</a></li>
                 <li class="nav-item"><a class="nav-link" href="forum.php">Forum</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="annuaire.php">Contact</a></li>
 
                 <?php if (estConnecte() && $_SESSION['role'] == 'gestionnaire') { ?>
                     <li class="nav-item"><a class="nav-link" href="gestion.php">Gestion</a></li>
