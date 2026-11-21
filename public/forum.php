@@ -113,12 +113,13 @@ include 'header.php'
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead>
-                <tr><th>Titre</th><th>Auteur</th><th>Date</th><th>Réponses</th><th></th></tr>
+                <tr><th>Titre</th><th>Contenu</th><th>Auteur</th><th>Date</th><th>Réponses</th><th></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($posts as $post) { ?>
                     <tr>
                         <td><?= htmlspecialchars($post->getTitre()) ?></td>
+                        <td><?= htmlspecialchars(mb_strimwidth($post->getContenu(), 0, 100, '...')) ?></td>
                         <td><?= htmlspecialchars($utilisateursRepository->getNomComplet($post->getRefUtilisateur())) ?></td>
                         <td><?= date('d/m/Y à H:i', strtotime($post->getDateHeure())) ?></td>
                         <td><a href="posts.php?id=<?= $post->getIdPost() ?>" class="btn btn-sm btn-outline-primary">Ouvrir</a></td>
