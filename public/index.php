@@ -21,7 +21,7 @@ include 'header.php';
         <?php } else { ?>
             <h1 class="display-5 fw-bold">Bienvenue sur la plateforme HSP</h1>
             <p class="fs-5">La Générale des Hôpitaux (GDH), premier groupe de cliniques et hôpitaux privés en France, relie ses médecins, les étudiants en médecine et ses entreprises partenaires.</p>
-            <a href="inscription.php" class="btn btn-primary btn-lg">Rejoindre la plateforme</a>
+            <a href="/projet_hsp/public/compte/inscription.php" class="btn btn-primary btn-lg">Rejoindre la plateforme</a>
         <?php } ?>
     </div>
     <div class="row text-center">
@@ -72,14 +72,14 @@ include 'header.php';
                         <h5 class="card-title mt-2"><?= htmlspecialchars($evenement->getTitreEvenement()) ?></h5>
                         <p class="card-text mb-1">📅 <?= date('d/m/Y', strtotime($evenement->getDateEvenement())) ?></p>
                         <p class="card-text">Places restantes : <?= $evenement->getPlacesRestantes() ?></p>
-                        <a href="evenement.php?id=<?= $evenement->getIdEvenement() ?>" class="btn btn-outline-primary btn-sm">Voir</a>
+                        <a href="/projet_hsp/public/evenement/evenement.php?id=<?= $evenement->getIdEvenement() ?>" class="btn btn-outline-primary btn-sm">Voir</a>
                     </div>
                 </div>
             </div>
         <?php } ?>
     </div>
 <?php } ?>
-    <a href="listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
+    <a href="/projet_hsp/public/evenement/listeEvenements.php" class="btn btn-link px-0">Voir tous les événements →</a>
 
 
 <?php include 'footer.php'; ?>

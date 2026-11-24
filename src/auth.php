@@ -14,7 +14,7 @@ function estConnecte()
 function exigerConnexion()
 {
     if (!estConnecte()) {
-        header('Location: connexion.php');
+        header('Location: /projet_hsp/public/compte/connexion.php');
         exit;
     }
 }
@@ -25,7 +25,7 @@ function exigerRole($roles)
 {
     exigerConnexion();
     if (!in_array($_SESSION['role'], $roles)) {
-        header('Location: index.php');
+        header('Location: /projet_hsp/public/index.php');
         exit;
     }
 }
