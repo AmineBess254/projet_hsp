@@ -83,6 +83,9 @@ include 'header.php'
             <a href="forum.php?canal=<?= $canalAffiche->getIdCanal() ?>">Effacer la recherche</a>
         </p>
     <?php } ?>
+    <?php if (isset($_GET['ok']) && $_GET['ok'] == 'supprime') { ?>
+        <div class="alert alert-success">Le post a bien été supprimé.</div>
+    <?php } ?>
 
 
     <?php if ($peutPoster) { ?>
