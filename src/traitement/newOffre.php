@@ -4,7 +4,7 @@ require_once '../modele/Offre.php';
 require_once '../repository/OffreRepository.php';
 session_start();
 
-// SÉCURITÉ : seuls un partenaire ou un gestionnaire connecté peuvent publier
+// seuls un partenaire connecté peuvent publier
 if (!isset($_SESSION['id_utilisateur'], $_SESSION['role']) || !in_array($_SESSION['role'], ['partenaire'])) {
     header('Location: ../../public/connexion.php');
     exit();
