@@ -38,6 +38,27 @@ class OffreRepository
         }
         return $tabOffre;
     }
+    // recupere les offres selon la spec
+    public function getOffresParType($type)
+    {
+        // 1) On récupère TOUTES les offres
+        $toutesLesOffres = $this->getAllOffre();
+
+        // 2) On prépare une liste vide pour ranger les bonnes offres
+        $offresFiltrees = [];
+
+        // 3) On regarde les offres une par une
+        foreach ($toutesLesOffres as $offre) {
+
+            // 4) Si l'offre a le bon type, on la garde
+            if ($offre->getTypeOffre() == $type) {
+                $offresFiltrees[] = $offre;
+            }
+        }
+
+        // 5) On renvoie seulement les offres gardées
+        return $offresFiltrees;
+    }
 
     public function ajouterOffre(Offre $offre)
     {
@@ -54,6 +75,7 @@ class OffreRepository
         $req->bindValue(':ref_utilisateur', $offre->getRefUtilisateur());
         $req->execute();
     }
+
 
     public function modifierOffre(Offre $offre)
     {
@@ -79,4 +101,5 @@ class OffreRepository
         $req->bindValue(':id_offre', $idOffre);
         $req->execute();
     }
+
 }
