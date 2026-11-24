@@ -2,9 +2,10 @@
 class DroitsForum
 {
     private $role;
-    private $lecture = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant', 'medecin'] , ];
+    private $lecture = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire','gestionnaire'],'Étudiants'=> ['etudiant', 'medecin', 'gestionnaire'] , ];
     private $creationPost = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant'] , ];
     private $reponse = ['Général' => ['etudiant','medecin','partenaire','gestionnaire'],'Médecins' => ['medecin','partenaire'],'Étudiants'=> ['etudiant', 'medecin'] , ];
+
 
 public function __construct($role){
     $this->role = $role;
@@ -23,7 +24,8 @@ private function autorise($regles, $canal){
 $nom = $canal->getNomCanal();
 return isset($regles[$nom]) && in_array($this->role, $regles[$nom]);
 }
-
-
+public function peutModerer(){
+    return $this->role =='gestionnaire';
+}
 
 }

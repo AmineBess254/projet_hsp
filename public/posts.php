@@ -24,6 +24,12 @@ if($post == null || $canal == null || !$droits->peutLire($canal)){
 }
 $reponses = (new ReponseRepository())->getReponseParPost($post->getIdPost());
 $peutRepondre = $droits->peutRepondre($canal);
+if(isset($_POST['supprimer']) && $droits->peutModerer()){
+    $idCanal = $post->getRefCanal();
+    (new PostRepository())->supprimerPost($post);
+    header('Location: forum.php?canal=' . $idCanal . '&ok=supprime');
+    exit;
+}
 include 'header.php';
 ?>
 <a href="forum.php?canal=<?= $canal->getIdCanal() ?>" class="text-decoration-none">← Retour au canal <?= htmlspecialchars($canal->getNomCanal()) ?></a>
@@ -49,6 +55,12 @@ include 'header.php';
         <p class="mb-0"><?= nl2br(htmlspecialchars($post->getContenu())) ?></p>
     </div>
 </div>
+<?php if ($droits->peutModerer()) { ?>
+    <form action="posts.php?id=<?= $post->getIdPost() ?>" method="post" class="mb-4"
+          onsubmit="return confirm('Supprimer ce post et toutes ses réponses ?');">
+        <button type="submit" name="supprimer" value="1" class="btn btn-sm btn-outline-danger">Supprimer ce post (modération)</button>
+    </form>
+<?php } ?>
 
 
 <h2 class="h5"><?= count($reponses) ?> réponse(s)</h2>
